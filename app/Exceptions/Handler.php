@@ -84,9 +84,8 @@ class Handler extends ExceptionHandler
             } else if ($e instanceof MethodNotAllowedHttpException) {
 
                 $message = 'Método HTTP não permitido';
-            } else if($e instanceof HttpException) {
-
-                $message = 'Erro interno do servidor';
+            } else {
+                $message = 'Erro inesperado';
             }
 
             $response = response()->json([
