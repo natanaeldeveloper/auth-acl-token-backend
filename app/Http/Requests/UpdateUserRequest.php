@@ -2,16 +2,16 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class UpdateUserRequest extends FormRequest
+class UpdateUserRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,11 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->route('user');
+
         return [
-            //
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|' . Rule::unique('users')->ignore($userId)
         ];
     }
 }
