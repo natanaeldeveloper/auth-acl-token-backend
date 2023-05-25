@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePermissionRequest extends Request
 {
@@ -11,7 +12,7 @@ class UpdatePermissionRequest extends Request
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +22,11 @@ class UpdatePermissionRequest extends Request
      */
     public function rules(): array
     {
+        $permissionId = $this->route('role');
+
         return [
-            //
+            'name' => 'required|min:3|max:255|' . Rule::unique('roles')->ignore($permissionId),
+            'description' => 'required|max:255',
         ];
     }
 }
