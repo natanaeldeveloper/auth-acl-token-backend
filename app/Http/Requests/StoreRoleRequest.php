@@ -11,7 +11,7 @@ class StoreRoleRequest extends Request
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreRoleRequest extends Request
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|min:3|max:255|unique:roles',
+            'description' => 'required|max:255'
         ];
     }
 }
