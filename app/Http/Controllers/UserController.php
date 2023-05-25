@@ -6,7 +6,6 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
@@ -15,10 +14,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $response = User::orderBy('name')->paginate(10);
-        $response['time'] = Carbon::now();
+        $users = User::orderBy('name')->paginate(10);
 
-        return response()->json($response);
+        return response()->json($users);
     }
 
     /**
@@ -32,7 +30,6 @@ class UserController extends Controller
             'status'    => 'success',
             'message'   => __('messages.created.success'),
             'data'      => $user,
-            'time'      => Carbon::now(),
         ], 201);
     }
 
@@ -43,7 +40,6 @@ class UserController extends Controller
     {
         return response()->json([
             'data' => $user,
-            'time' => Carbon::now(),
         ]);
     }
 
@@ -58,7 +54,6 @@ class UserController extends Controller
             'status'    => 'success',
             'message'   => __('messages.updated.success'),
             'data'      => $user,
-            'time'      => Carbon::now(),
         ]);
     }
 
@@ -73,7 +68,6 @@ class UserController extends Controller
             'status'    => 'success',
             'message'   => __('messages.deleted.success'),
             'id'        => $user->id,
-            'time'      => Carbon::now(),
         ]);
     }
 }
