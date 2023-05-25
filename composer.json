@@ -28,7 +28,7 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/CustomHelper.php"
+            "app/Helpers/AuthHelper.php"
         ]
     },
     "autoload-dev": {
