@@ -2,14 +2,13 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -28,31 +27,13 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * A list of the internal exception types that should not be reported.
-     *
-     * @var array<int, class-string<\Throwable>>
-     */
-    protected $internalDontReport = [
-        // AuthenticationException::class,
-        // AuthorizationException::class,
-        BackedEnumCaseNotFoundException::class,
-        // HttpException::class,
-        HttpResponseException::class,
-        ModelNotFoundException::class,
-        MultipleRecordsFoundException::class,
-        RecordsNotFoundException::class,
-        SuspiciousOperationException::class,
-        TokenMismatchException::class,
-        // ValidationException::class,
-    ];
-
-    /**
      * @var array<string<string, int>>
      */
     protected $errorMappings = [
         ValidationException::class => ['validation_error', Response::HTTP_UNPROCESSABLE_ENTITY],
         NotFoundHttpException::class => ['not_found_error', Response::HTTP_NOT_FOUND],
         AuthorizationException::class => ['authorization_error', Response::HTTP_FORBIDDEN],
+        AccessDeniedHttpException::class => ['authorization_error', Response::HTTP_UNAUTHORIZED],
         AuthenticationException::class => ['authentication_error', Response::HTTP_UNAUTHORIZED],
         MethodNotAllowedHttpException::class => ['method_not_allowed_error', Response::HTTP_METHOD_NOT_ALLOWED]
     ];
@@ -62,32 +43,43 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
+        $this->renderable(function (Throwable $e) {
 
-            $errorType  = get_class($e);
-            $errorAlias = $this->errorMappings[$errorType][0] ?? 'generic_error';
-            $statusCode = $this->errorMappings[$errorType][1] ?? Response::HTTP_INTERNAL_SERVER_ERROR;
-            $message    = __('exceptions.' . $errorAlias) ?? 'Internal Server Error';
+            $errorClass = get_class($e);
+            $errorKey   = $this->errorMappings[$errorClass][0] ?? 'internal_server_error';
+            $statusCode = $this->errorMappings[$errorClass][1] ?? Response::HTTP_INTERNAL_SERVER_ERROR;
+            $message    = __('exceptions.' . $errorKey) ?? 'Internal Server Error';
             $time       = Carbon::now();
 
-            $response = response()->json([
-                'message'       => $message,
-                'errorAlias'    => $errorAlias,
-                'code'          => $statusCode,
-                'time'          => $time,
-            ], $statusCode);
+            if($e instanceof ValidationException) {
 
+                $response = response()->json([
+                    'status'        => 'error',
+                    'code'          => $statusCode,
+                    'message'       => $message,
+                    'time'          => $time,
+                    'errors'        => $e->errors(),
+                ], $statusCode);
+
+            } else {
+
+                //erros esperamos com formato padrão
+                $response = response()->json([
+                    'status'        => 'error',
+                    'code'          => $statusCode,
+                    'message'       => $message,
+                    'time'          => $time,
+                ], $statusCode);
+            }
 
             // adiciona parâmetros em ambiente de desenvolvimento
-            if (!app()->isProduction() && $e instanceof HttpException) {
+            if (env('APP_DEBUG')) {
 
                 $data = $response->getData();
 
                 $data->message  = $e->getMessage();
                 $data->trace    = $e->getTrace();
-                $data->code     = $e->getStatusCode();
 
-                $response->setStatusCode($e->getStatusCode());
                 $response->setData($data);
             }
 
