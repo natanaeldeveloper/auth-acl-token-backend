@@ -51,7 +51,8 @@ class Handler extends ExceptionHandler
             $message    = __('exceptions.' . $errorKey) ?? 'Internal Server Error';
             $time       = Carbon::now();
 
-            if($e instanceof ValidationException) {
+            //erros esperados com formatação diferenciada
+            if ($e instanceof ValidationException) {
 
                 $response = response()->json([
                     'status'        => 'error',
@@ -60,10 +61,10 @@ class Handler extends ExceptionHandler
                     'time'          => $time,
                     'errors'        => $e->errors(),
                 ], $statusCode);
+            }
+            else { //erros esperados com formatação comun
 
-            } else {
 
-                //erros esperamos com formato padrão
                 $response = response()->json([
                     'status'        => 'error',
                     'code'          => $statusCode,
@@ -72,7 +73,7 @@ class Handler extends ExceptionHandler
                 ], $statusCode);
             }
 
-            // adiciona parâmetros em ambiente de desenvolvimento
+            // adiciona parâmetros ao response quando é ambiente de desenvolvimento
             if (env('APP_DEBUG')) {
 
                 $data = $response->getData();
