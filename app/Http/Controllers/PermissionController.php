@@ -14,7 +14,9 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        //
+        $permissions = Permission::orderBy('name')->paginate(10);
+
+        return response()->json($permissions);
     }
 
     /**
@@ -22,7 +24,13 @@ class PermissionController extends Controller
      */
     public function store(StorePermissionRequest $request)
     {
-        //
+        $permission = Permission::create($request->all());
+
+        return response()->json([
+            'status'    => 'success',
+            'message'   => __('messages.created.success'),
+            'data'      => $permission,
+        ], 201);
     }
 
     /**
@@ -30,7 +38,9 @@ class PermissionController extends Controller
      */
     public function show(Permission $permission)
     {
-        //
+        return response()->json([
+            'data' => $permission,
+        ]);
     }
 
     /**
@@ -38,7 +48,13 @@ class PermissionController extends Controller
      */
     public function update(UpdatePermissionRequest $request, Permission $permission)
     {
-        //
+        $permission->update($request->all());
+
+        return response()->json([
+            'status'    => 'success',
+            'message'   => __('messages.updated.success'),
+            'data'      => $permission,
+        ]);
     }
 
     /**
@@ -46,6 +62,12 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
-        //
+        $permission->delete();
+
+        return response()->json([
+            'status'    => 'success',
+            'message'   => __('messages.deleted.success'),
+            'id'        => $permission->id,
+        ]);
     }
 }
