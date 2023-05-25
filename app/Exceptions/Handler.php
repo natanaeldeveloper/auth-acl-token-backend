@@ -27,7 +27,7 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
-        /**
+    /**
      * A list of the internal exception types that should not be reported.
      *
      * @var array<int, class-string<\Throwable>>
@@ -67,26 +67,8 @@ class Handler extends ExceptionHandler
             $errorType  = get_class($e);
             $errorAlias = $this->errorMappings[$errorType][0] ?? 'generic_error';
             $statusCode = $this->errorMappings[$errorType][1] ?? Response::HTTP_INTERNAL_SERVER_ERROR;
+            $message    = __('exceptions.' . $errorAlias) ?? 'Internal Server Error';
             $time       = Carbon::now();
-
-            if ($e instanceof ValidationException) {
-
-                $message = 'Erro de validação';
-            } else if ($e instanceof NotFoundHttpException) {
-
-                $message = 'Recurso não encontrado';
-            } else if ($e instanceof AuthenticationException) {
-
-                $message = 'Acesso não autorizado';
-            } else if ($e instanceof AuthorizationException) {
-
-                $message = 'Permissão negada';
-            } else if ($e instanceof MethodNotAllowedHttpException) {
-
-                $message = 'Método HTTP não permitido';
-            } else {
-                $message = 'Erro inesperado';
-            }
 
             $response = response()->json([
                 'message'       => $message,
