@@ -15,7 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('description');
+            $table->foreignId('permission_id');
             $table->timestamps();
+
+            $table->foreign('permission_id')
+                ->references('id')
+                ->on('permissions');
         });
     }
 
