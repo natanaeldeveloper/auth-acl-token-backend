@@ -22,11 +22,12 @@ class UpdatePermissionRequest extends Request
      */
     public function rules(): array
     {
-        $permissionId = $this->route('role');
+        $permissionId = $this->route('permission');
 
         return [
-            'name' => 'required|min:3|max:255|' . Rule::unique('roles')->ignore($permissionId),
+            'name' => 'required|min:3|max:255|' . Rule::unique('permissions')->ignore($permissionId),
             'description' => 'required|max:255',
+            'permission_id' => 'nullable|'.Rule::exists('permissions','id'),
         ];
     }
 }

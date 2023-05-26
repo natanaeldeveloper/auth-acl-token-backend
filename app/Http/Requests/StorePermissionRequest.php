@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePermissionRequest extends Request
 {
@@ -23,7 +24,8 @@ class StorePermissionRequest extends Request
     {
         return [
             'name' => 'required|min:3|max:255|unique:permissions',
-            'description' => 'required|max:255'
+            'description' => 'required|max:255',
+            'permission_id' => 'nullable|'.Rule::exists('permissions'),
         ];
     }
 }
