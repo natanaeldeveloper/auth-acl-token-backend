@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('permission_id');
             $table->timestamps();
 
+            $table->unique(['user_id', 'permission_id']);
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
