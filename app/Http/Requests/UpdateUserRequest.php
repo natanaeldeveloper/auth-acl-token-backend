@@ -25,7 +25,7 @@ class UpdateUserRequest extends Request
 
         return [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|' . Rule::unique('users')->ignore($userId)
+            'email' => 'required|email|max:255|' . Rule::unique('users', 'email')->ignore($userId)
         ];
     }
 }

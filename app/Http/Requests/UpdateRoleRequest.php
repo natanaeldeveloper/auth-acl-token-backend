@@ -26,7 +26,7 @@ class UpdateRoleRequest extends Request
         $roleId = $this->route('role');
 
         return [
-            'name' => 'required|min:3|max:255|' . Rule::unique('roles')->ignore($roleId),
+            'name' => 'required|min:3|max:255|' . Rule::unique('roles', 'name')->ignore($roleId),
             'description' => 'required|max:255',
         ];
     }

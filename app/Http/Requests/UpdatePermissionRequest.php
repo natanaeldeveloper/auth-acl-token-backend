@@ -25,7 +25,7 @@ class UpdatePermissionRequest extends Request
         $permissionId = $this->route('permission');
 
         return [
-            'name' => 'required|min:3|max:255|' . Rule::unique('permissions')->ignore($permissionId),
+            'name' => 'required|min:3|max:255|' . Rule::unique('permissions', 'name')->ignore($permissionId),
             'description' => 'required|max:255',
             'permission_id' => 'nullable|'.Rule::exists('permissions','id'),
         ];

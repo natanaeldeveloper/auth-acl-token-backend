@@ -25,7 +25,7 @@ class StorePermissionRequest extends Request
         return [
             'name' => 'required|min:3|max:255|unique:permissions',
             'description' => 'required|max:255',
-            'permission_id' => 'nullable|'.Rule::exists('permissions'),
+            'permission_id' => 'nullable|'.Rule::exists('permissions', 'id'),
         ];
     }
 }
