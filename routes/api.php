@@ -1,10 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,13 +13,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', [LoginController::class, 'login']);
+Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group( function() {
+Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('logout', [LoginController::class, 'logout']);
+    Route::post('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
 
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('roles', RoleController::class);
-    Route::apiResource('permissions', PermissionController::class);
+    Route::apiResource('roles', App\Http\Controllers\RoleController::class);
+    Route::apiResource('permissions', App\Http\Controllers\PermissionController::class);
+    Route::apiResource('users', App\Http\Controllers\UserController::class);
+
+    // rotas de permissões do papel.
+    Route::prefix('roles/{role}/permissions')->group(function () {
+        Route::get('/', [App\Http\Controllers\Pivot\PivotRoleToPermissionController::class, 'index']);
+        Route::post('/', [App\Http\Controllers\Pivot\PivotRoleToPermissionController::class, 'store']);
+        Route::delete('/', [App\Http\Controllers\Pivot\PivotRoleToPermissionController::class, 'remove']);
+        Route::post('redefine', [App\Http\Controllers\Pivot\PivotRoleToPermissionController::class, 'redefine']);
+    });
 });
