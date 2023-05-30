@@ -14,9 +14,8 @@ class PivotRoleToPermissionController extends Controller
      */
     public function index(Role $role)
     {
-        $role->load('permissions');
-
-        $data = $role->permissions;
+        // retorna as permissões do papel paginados.
+        $data = $role->users()->paginate(10);
 
         return response()->json([
             'data' => $data
@@ -35,15 +34,16 @@ class PivotRoleToPermissionController extends Controller
             ->pluck('permission_id')
             ->toArray();
 
-        // filtra o ID das permissões que ainda não foram vinculadas ao papel.
-        $includeIds = array_filter($permissionIds, function($value) use($existingIds) {
-            return !in_array($value, $existingIds);
-        });
-
         /**
          * O 'attach' diferente do comando: 'sync' não consegue diferenciar
          *  registros duplicados, por isso, a filtragem é feita a mão.
          */
+
+        // filtra o ID das permissões que ainda não foram vinculadas ao papel.
+        $includeIds = array_filter($permissionIds, function ($value) use ($existingIds) {
+            return !in_array($value, $existingIds);
+        });
+
         $role->permissions()->attach($includeIds);
 
         $data = count($includeIds);
