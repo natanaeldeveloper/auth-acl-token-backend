@@ -38,4 +38,36 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/', [App\Http\Controllers\Pivot\PivotRoleToUserController::class, 'remove']);
         Route::post('redefine', [App\Http\Controllers\Pivot\PivotRoleToUserController::class, 'redefine']);
     });
+
+    // rotas de permissões do usuário.
+    Route::prefix('users/{user}/permissions')->group(function () {
+        Route::get('/', [App\Http\Controllers\Pivot\PivotUserToPermissionController::class, 'index']);
+        Route::post('/', [App\Http\Controllers\Pivot\PivotUserToPermissionController::class, 'store']);
+        Route::delete('/', [App\Http\Controllers\Pivot\PivotUserToPermissionController::class, 'remove']);
+        Route::post('redefine', [App\Http\Controllers\Pivot\PivotUserToPermissionController::class, 'redefine']);
+    });
+
+    // rotas de papeis do usuário.
+    Route::prefix('users/{user}/roles')->group(function () {
+        Route::get('/', [App\Http\Controllers\Pivot\PivotUserToRoleController::class, 'index']);
+        Route::post('/', [App\Http\Controllers\Pivot\PivotUserToRoleController::class, 'store']);
+        Route::delete('/', [App\Http\Controllers\Pivot\PivotUserToRoleController::class, 'remove']);
+        Route::post('redefine', [App\Http\Controllers\Pivot\PivotUserToRoleController::class, 'redefine']);
+    });
+
+    // rotas de papeis da permissão.
+    Route::prefix('permissions/{permission}/roles')->group(function () {
+        Route::get('/', [App\Http\Controllers\Pivot\PivotPermissionToRoleController::class, 'index']);
+        Route::post('/', [App\Http\Controllers\Pivot\PivotPermissionToRoleController::class, 'store']);
+        Route::delete('/', [App\Http\Controllers\Pivot\PivotPermissionToRoleController::class, 'remove']);
+        Route::post('redefine', [App\Http\Controllers\Pivot\PivotPermissionToRoleController::class, 'redefine']);
+    });
+
+    // rotas de usuários da permissão.
+    Route::prefix('permissions/{permission}/users')->group(function () {
+        Route::get('/', [App\Http\Controllers\Pivot\PivotPermissionToUserController::class, 'index']);
+        Route::post('/', [App\Http\Controllers\Pivot\PivotPermissionToUserController::class, 'store']);
+        Route::delete('/', [App\Http\Controllers\Pivot\PivotPermissionToUserController::class, 'remove']);
+        Route::post('redefine', [App\Http\Controllers\Pivot\PivotPermissionToUserController::class, 'redefine']);
+    });
 });
