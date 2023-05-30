@@ -30,4 +30,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/', [App\Http\Controllers\Pivot\PivotRoleToPermissionController::class, 'remove']);
         Route::post('redefine', [App\Http\Controllers\Pivot\PivotRoleToPermissionController::class, 'redefine']);
     });
+
+    // rotas de usuários do papel.
+    Route::prefix('roles/{role}/users')->group(function () {
+        Route::get('/', [App\Http\Controllers\Pivot\PivotRoleToUserController::class, 'index']);
+        Route::post('/', [App\Http\Controllers\Pivot\PivotRoleToUserController::class, 'store']);
+        Route::delete('/', [App\Http\Controllers\Pivot\PivotRoleToUserController::class, 'remove']);
+        Route::post('redefine', [App\Http\Controllers\Pivot\PivotRoleToUserController::class, 'redefine']);
+    });
 });
