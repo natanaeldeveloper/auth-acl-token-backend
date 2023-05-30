@@ -27,33 +27,41 @@ class PivotUserToPermissionController extends Controller
      */
     public function store(PivotUserToPermissionRequest $request, User $user)
     {
-        $permissionIds = $request->input('permissions') ?? [];
+        DB::beginTransaction();
 
-        $existingIds = DB::table('users_permissions')
-            ->where('user_id', $user->id)
-            ->select('permission_id')
-            ->pluck('permission_id')
-            ->toArray();
+        try {
+            $permissionIds = $request->input('permissions') ?? [];
 
-        /**
-         * O 'attach' diferente do comando: 'sync' não consegue diferenciar
-         *  registros duplicados, por isso, a filtragem é feita a mão.
-         */
+            $existingIds = DB::table('users_permissions')
+                ->where('user_id', $user->id)
+                ->select('permission_id')
+                ->pluck('permission_id')
+                ->toArray();
 
-        // filtra o ID das permissões que ainda não foram vinculadas ao usuário.
-        $includeIds = array_filter($permissionIds, function ($value) use ($existingIds) {
-            return !in_array($value, $existingIds);
-        });
+            /**
+             * O 'attach' diferente do comando: 'sync' não consegue diferenciar
+             *  registros duplicados, por isso, a filtragem é feita a mão.
+             */
 
-        $user->permissions()->attach($includeIds);
+            // filtra o ID das permissões que ainda não foram vinculadas ao usuário.
+            $includeIds = array_filter($permissionIds, function ($value) use ($existingIds) {
+                return !in_array($value, $existingIds);
+            });
 
-        $data = count($includeIds);
+            $user->permissions()->attach($includeIds);
 
-        return response()->json([
-            'status'    => 'success',
-            'message'   => __('messages.created.success'),
-            'data'      => $data,
-        ]);
+            $data = count($includeIds);
+
+            DB::commit();
+
+            return response()->json([
+                'status'    => 'success',
+                'message'   => __('messages.created.success'),
+                'data'      => $data,
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+        }
     }
 
     /**
@@ -61,15 +69,23 @@ class PivotUserToPermissionController extends Controller
      */
     public function remove(PivotUserToPermissionRequest $request, User $user)
     {
-        $permissionIds = $request->input('permissions') ?? [];
+        DB::beginTransaction();
 
-        $data = $user->permissions()->detach($permissionIds);
+        try {
+            $permissionIds = $request->input('permissions') ?? [];
 
-        return response()->json([
-            'status'    => 'success',
-            'message'   => __('messages.deleted.success'),
-            'data'      => $data,
-        ]);
+            $data = $user->permissions()->detach($permissionIds);
+
+            DB::commit();
+
+            return response()->json([
+                'status'    => 'success',
+                'message'   => __('messages.deleted.success'),
+                'data'      => $data,
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+        }
     }
 
     /**
@@ -77,14 +93,22 @@ class PivotUserToPermissionController extends Controller
      */
     public function redefine(PivotUserToPermissionRequest $request, User $user)
     {
-        $permissionIds = $request->input('permissions') ?? [];
+        DB::beginTransaction();
 
-        $data = $user->permissions()->sync($permissionIds);
+        try {
+            $permissionIds = $request->input('permissions') ?? [];
 
-        return response()->json([
-            'status'    => 'success',
-            'message'   => __('messages.updated.success'),
-            'data'      => $data,
-        ]);
+            $data = $user->permissions()->sync($permissionIds);
+
+            DB::commit();
+
+            return response()->json([
+                'status'    => 'success',
+                'message'   => __('messages.updated.success'),
+                'data'      => $data,
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+        }
     }
 }

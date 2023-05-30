@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -63,8 +64,7 @@ class LoginController extends Controller
         $user = User::find($userId);
 
         $tokenName = formatUserAgent(request()->header('User-Agent'));
-
-        $token = $user->createToken($tokenName);
+        $token = $user->createToken($tokenName, []);
 
         return $token;
     }
