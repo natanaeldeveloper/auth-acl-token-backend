@@ -27,7 +27,7 @@ class PivotRoleToPermissionController extends Controller
      */
     public function store(PivotRoleToPermissionRequest $request, Role $role)
     {
-        $permissionIds = $request->input('permissions');
+        $permissionIds = $request->input('permissions') ?? [];
 
         $existingIds = DB::table('roles_permissions')
             ->where('role_id', $role->id)
@@ -60,7 +60,7 @@ class PivotRoleToPermissionController extends Controller
      */
     public function remove(PivotRoleToPermissionRequest $request, Role $role)
     {
-        $permissionIds = $request->input('permissions');
+        $permissionIds = $request->input('permissions') ?? [];
 
         $data = $role->permissions()->detach($permissionIds);
 
@@ -76,7 +76,7 @@ class PivotRoleToPermissionController extends Controller
      */
     public function redefine(PivotRoleToPermissionRequest $request, Role $role)
     {
-        $permissionIds = $request->input('permissions');
+        $permissionIds = $request->input('permissions') ?? [];
 
         $data = $role->permissions()->sync($permissionIds);
 

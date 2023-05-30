@@ -27,7 +27,7 @@ class PivotRoleToUserController extends Controller
      */
     public function store(PivotRoleToUserRequest $request, Role $role)
     {
-        $userIds = $request->input('users');
+        $userIds = $request->input('users') ?? [];
 
         $existingIds = DB::table('users_roles')
             ->where('role_id', $role->id)
@@ -77,7 +77,7 @@ class PivotRoleToUserController extends Controller
      */
     public function redefine(PivotRoleToUserRequest $request, Role $role)
     {
-        $userIds = $request->input('users');
+        $userIds = $request->input('users') ?? [];
 
         $data = $role->users()->sync($userIds);
 
