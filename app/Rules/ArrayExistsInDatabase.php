@@ -19,10 +19,13 @@ class ArrayExistsInDatabase implements Rule
 
     public function passes($attribute, $value)
     {
-        $existingIds = DB::table($this->table)->pluck($this->column);
-        $this->noExisting = array_diff($value, $existingIds->toArray());
+        $existingIds = DB::table($this->table)
+            ->whereIn('id', $value)
+            ->select($this->column)
+            ->pluck($this->column)
+            ->toArray();
 
-        return count($this->noExisting) === 0;
+        return count($value) === count($existingIds);
     }
 
     public function message()
