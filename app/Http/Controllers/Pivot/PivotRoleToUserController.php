@@ -31,7 +31,7 @@ class PivotRoleToUserController extends Controller
 
         $existingIds = DB::table('users_roles')
             ->where('role_id', $role->id)
-            ->select('id')
+            ->select('user_id')
             ->pluck('user_id')
             ->toArray();
 

@@ -15,7 +15,7 @@ class PivotRoleToPermissionController extends Controller
     public function index(Role $role)
     {
         // retorna as permissões do papel paginados.
-        $data = $role->users()->paginate(10);
+        $data = $role->permissions()->paginate(10);
 
         return response()->json([
             'data' => $data
@@ -31,6 +31,7 @@ class PivotRoleToPermissionController extends Controller
 
         $existingIds = DB::table('roles_permissions')
             ->where('role_id', $role->id)
+            ->select('permission_id')
             ->pluck('permission_id')
             ->toArray();
 
