@@ -64,7 +64,14 @@ class LoginController extends Controller
 
         $tokenName = formatUserAgent(request()->header('User-Agent'));
 
-        $token = $user->createToken($tokenName);
+        /**
+         * As habilidades do token, quando relacionado ao model User, não serão
+         * consultas pela coluna 'abilities' presente na tabela 'personal_access_tokens',
+         * mas sim, pelas permissões vinculadas ao usuário e aos seus papeis.
+         * Por isso as habilidades estão sendo enviadas como uma array vazia
+         * ao criar o token logo abaixo.
+         */
+        $token = $user->createToken($tokenName, []);
 
         return $token;
     }
