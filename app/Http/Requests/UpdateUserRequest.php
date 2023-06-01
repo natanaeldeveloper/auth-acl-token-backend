@@ -11,7 +11,7 @@ class UpdateUserRequest extends Request
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->instance()->user()->tokenCan('user:write');
     }
 
     /**
