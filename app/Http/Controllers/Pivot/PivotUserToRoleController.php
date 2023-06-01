@@ -27,33 +27,41 @@ class PivotUserToRoleController extends Controller
      */
     public function store(PivotUserToRoleRequest $request, User $user)
     {
-        $roleIds = $request->input('roles') ?? [];
+        DB::beginTransaction();
 
-        $existingIds = DB::table('users_roles')
-            ->where('user_id', $user->id)
-            ->select('role_id')
-            ->pluck('role_id')
-            ->toArray();
+        try {
+            $roleIds = $request->input('roles') ?? [];
 
-        /**
-         * O 'attach' diferente do comando: 'sync' não consegue diferenciar
-         *  registros duplicados, por isso, a filtragem é feita a mão.
-         */
+            $existingIds = DB::table('users_roles')
+                ->where('user_id', $user->id)
+                ->select('role_id')
+                ->pluck('role_id')
+                ->toArray();
 
-        // filtra o ID dos papeis que ainda não foram vinculadas ao usuário.
-        $includeIds = array_filter($roleIds, function ($value) use ($existingIds) {
-            return !in_array($value, $existingIds);
-        });
+            /**
+             * O 'attach' diferente do comando: 'sync' não consegue diferenciar
+             *  registros duplicados, por isso, a filtragem é feita a mão.
+             */
 
-        $user->roles()->attach($includeIds);
+            // filtra o ID dos papeis que ainda não foram vinculadas ao usuário.
+            $includeIds = array_filter($roleIds, function ($value) use ($existingIds) {
+                return !in_array($value, $existingIds);
+            });
 
-        $data = count($includeIds);
+            $user->roles()->attach($includeIds);
 
-        return response()->json([
-            'status'    => 'success',
-            'message'   => __('messages.created.success'),
-            'data'      => $data,
-        ]);
+            $data = count($includeIds);
+
+            DB::commit();
+
+            return response()->json([
+                'status'    => 'success',
+                'message'   => __('messages.created.success'),
+                'data'      => $data,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
     }
 
     /**
@@ -61,15 +69,23 @@ class PivotUserToRoleController extends Controller
      */
     public function remove(PivotUserToRoleRequest $request, User $user)
     {
-        $roleIds = $request->input('roles') ?? [];
+        DB::beginTransaction();
 
-        $data = $user->roles()->detach($roleIds);
+        try {
+            $roleIds = $request->input('roles') ?? [];
 
-        return response()->json([
-            'status'    => 'success',
-            'message'   => __('messages.deleted.success'),
-            'data'      => $data,
-        ]);
+            $data = $user->roles()->detach($roleIds);
+
+            DB::commit();
+
+            return response()->json([
+                'status'    => 'success',
+                'message'   => __('messages.deleted.success'),
+                'data'      => $data,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
     }
 
     /**
@@ -77,14 +93,22 @@ class PivotUserToRoleController extends Controller
      */
     public function redefine(PivotUserToRoleRequest $request, User $user)
     {
-        $roleIds = $request->input('roles') ?? [];
+        DB::beginTransaction();
 
-        $data = $user->roles()->sync($roleIds);
+        try {
+            $roleIds = $request->input('roles') ?? [];
 
-        return response()->json([
-            'status'    => 'success',
-            'message'   => __('messages.updated.success'),
-            'data'      => $data,
-        ]);
+            $data = $user->roles()->sync($roleIds);
+
+            DB::commit();
+
+            return response()->json([
+                'status'    => 'success',
+                'message'   => __('messages.updated.success'),
+                'data'      => $data,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
     }
 }

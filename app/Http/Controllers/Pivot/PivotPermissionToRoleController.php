@@ -27,33 +27,41 @@ class PivotPermissionToRoleController extends Controller
      */
     public function store(PivotPermissionToRoleRequest $request, Permission $permission)
     {
-        $roleIds = $request->input('roles') ?? [];
+        DB::beginTransaction();
 
-        $existingIds = DB::table('roles_permissions')
-            ->where('permission_id', $permission->id)
-            ->select('role_id')
-            ->pluck('role_id')
-            ->toArray();
+        try {
+            $roleIds = $request->input('roles') ?? [];
 
-        /**
-         * O 'attach' diferente do comando: 'sync' não consegue diferenciar
-         *  registros duplicados, por isso, a filtragem é feita a mão.
-         */
+            $existingIds = DB::table('roles_permissions')
+                ->where('permission_id', $permission->id)
+                ->select('role_id')
+                ->pluck('role_id')
+                ->toArray();
 
-        // filtra o ID dos papeis que ainda não foram vinculadas a permissão.
-        $includeIds = array_filter($roleIds, function ($value) use ($existingIds) {
-            return !in_array($value, $existingIds);
-        });
+            /**
+             * O 'attach' diferente do comando: 'sync' não consegue diferenciar
+             *  registros duplicados, por isso, a filtragem é feita a mão.
+             */
 
-        $permission->roles()->attach($includeIds);
+            // filtra o ID dos papeis que ainda não foram vinculadas a permissão.
+            $includeIds = array_filter($roleIds, function ($value) use ($existingIds) {
+                return !in_array($value, $existingIds);
+            });
 
-        $data = count($includeIds);
+            $permission->roles()->attach($includeIds);
 
-        return response()->json([
-            'status'    => 'success',
-            'message'   => __('messages.created.success'),
-            'data'      => $data,
-        ]);
+            $data = count($includeIds);
+
+            DB::commit();
+
+            return response()->json([
+                'status'    => 'success',
+                'message'   => __('messages.created.success'),
+                'data'      => $data,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
     }
 
     /**
@@ -61,15 +69,23 @@ class PivotPermissionToRoleController extends Controller
      */
     public function remove(PivotPermissionToRoleRequest $request, Permission $permission)
     {
-        $roleIds = $request->input('roles') ?? [];
+        DB::beginTransaction();
 
-        $data = $permission->roles()->detach($roleIds);
+        try {
+            $roleIds = $request->input('roles') ?? [];
 
-        return response()->json([
-            'status'    => 'success',
-            'message'   => __('messages.deleted.success'),
-            'data'      => $data,
-        ]);
+            $data = $permission->roles()->detach($roleIds);
+
+            DB::commit();
+
+            return response()->json([
+                'status'    => 'success',
+                'message'   => __('messages.deleted.success'),
+                'data'      => $data,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
     }
 
     /**
@@ -77,14 +93,22 @@ class PivotPermissionToRoleController extends Controller
      */
     public function redefine(PivotPermissionToRoleRequest $request, Permission $permission)
     {
-        $roleIds = $request->input('roles') ?? [];
+        DB::beginTransaction();
 
-        $data = $permission->roles()->sync($roleIds);
+        try {
+            $roleIds = $request->input('roles') ?? [];
 
-        return response()->json([
-            'status'    => 'success',
-            'message'   => __('messages.updated.success'),
-            'data'      => $data,
-        ]);
+            $data = $permission->roles()->sync($roleIds);
+
+            DB::commit();
+
+            return response()->json([
+                'status'    => 'success',
+                'message'   => __('messages.updated.success'),
+                'data'      => $data,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
     }
 }
