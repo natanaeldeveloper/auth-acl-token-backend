@@ -20,7 +20,7 @@ class ArrayExistsInDatabase implements Rule
     public function passes($attribute, $value)
     {
         $existingIds = DB::table($this->table)
-            ->whereIn('id', $value)
+            ->whereIn($this->column, $value)
             ->select($this->column)
             ->pluck($this->column)
             ->toArray();
