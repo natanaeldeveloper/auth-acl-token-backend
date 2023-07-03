@@ -21,9 +21,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout']);
 
-    Route::apiResource('roles', App\Http\Controllers\RoleController::class);
-    Route::apiResource('permissions', App\Http\Controllers\PermissionController::class);
-    Route::apiResource('users', App\Http\Controllers\UserController::class);
+    Route::apiResource('roles', App\Http\Controllers\RoleController::class)->names('roles');
+    Route::apiResource('permissions', App\Http\Controllers\PermissionController::class)->names('permissions');
+    Route::apiResource('users', App\Http\Controllers\UserController::class)->names('users');
 
     // rotas de permissões do papel.
     Route::prefix('roles/{role}/permissions')->group(function () {
