@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Pivot;
+namespace App\Http\Controllers\Auth\ACL\Pivot;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Pivot\PivotRoleToUserRequest;
+use App\Http\Requests\Auth\ACL\PivotRoleToUserRequest;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Pivot;
+namespace App\Http\Requests\Auth;
 
 use App\Http\Requests\Request;
-use App\Rules\ArrayExistsInDatabase;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class PivotRoleToUserRequest extends Request
+class UpdateRoleRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +23,12 @@ class PivotRoleToUserRequest extends Request
      */
     public function rules(): array
     {
+
+        $roleId = $this->route('role');
+
         return [
-            'users' => [
-                'nullable',
-                'array',
-                new ArrayExistsInDatabase('users', 'id'),
-            ]
+            'name' => 'required|min:3|max:255|' . Rule::unique('roles', 'name')->ignore($roleId),
+            'description' => 'required|max:255',
         ];
     }
 }

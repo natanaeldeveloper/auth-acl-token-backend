@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth\ACL;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use App\Http\Requests\Request;
+use App\Rules\ArrayExistsInDatabase;
 
-class UpdateRoleRequest extends Request
+class PivotRoleToPermissionRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,12 @@ class UpdateRoleRequest extends Request
      */
     public function rules(): array
     {
-
-        $roleId = $this->route('role');
-
         return [
-            'name' => 'required|min:3|max:255|' . Rule::unique('roles', 'name')->ignore($roleId),
-            'description' => 'required|max:255',
+            'permissions' => [
+                'nullable',
+                'array',
+                new ArrayExistsInDatabase('permissions', 'id'),
+            ]
         ];
     }
 }

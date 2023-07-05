@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Pivot;
+namespace App\Http\Controllers\Auth\ACL\Pivot;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Pivot\PivotPermissionToUserRequest;
-use App\Models\Permission;
+use App\Http\Requests\Auth\ACL\PivotRoleToPermissionRequest;
+use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
-class PivotPermissionToUserController extends Controller
+class PivotRoleToPermissionController extends Controller
 {
     /**
-     * Lista os usuários da permissão.
+     * Lista as permissões do papel.
      */
-    public function index(Permission $permission)
+    public function index(Role $role)
     {
-        // retorna os usuários da permissão paginados.
-        $data = $permission->users()->paginate(10);
+        // retorna as permissões do papel paginados.
+        $data = $role->permissions()->paginate(10);
 
         return response()->json([
             'data' => $data
@@ -23,19 +23,19 @@ class PivotPermissionToUserController extends Controller
     }
 
     /**
-     * Adiciona os usuários vindos do request a permissão.
+     * Adiciona as permissões vindas do request ao papel.
      */
-    public function store(PivotPermissionToUserRequest $request, Permission $permission)
+    public function store(PivotRoleToPermissionRequest $request, Role $role)
     {
         DB::beginTransaction();
 
         try {
-            $userIds = $request->input('users') ?? [];
+            $permissionIds = $request->input('permissions') ?? [];
 
-            $existingIds = DB::table('users_roles')
-                ->where('role_id', $permission->id)
-                ->select('user_id')
-                ->pluck('user_id')
+            $existingIds = DB::table('roles_permissions')
+                ->where('role_id', $role->id)
+                ->select('permission_id')
+                ->pluck('permission_id')
                 ->toArray();
 
             /**
@@ -43,12 +43,12 @@ class PivotPermissionToUserController extends Controller
              *  registros duplicados, por isso, a filtragem é feita a mão.
              */
 
-            // filtra o ID dos usuários que ainda não foram vinculadas a permissão.
-            $includeIds = array_filter($userIds, function ($value) use ($existingIds) {
+            // filtra o ID das permissões que ainda não foram vinculadas ao papel.
+            $includeIds = array_filter($permissionIds, function ($value) use ($existingIds) {
                 return !in_array($value, $existingIds);
             });
 
-            $permission->users()->attach($includeIds);
+            $role->permissions()->attach($includeIds);
 
             $data = count($includeIds);
 
@@ -65,16 +65,16 @@ class PivotPermissionToUserController extends Controller
     }
 
     /**
-     * Remove todas os usuários da permissão.
+     * Remove todas as permissões do papel.
      */
-    public function remove(PivotPermissionToUserRequest $request, Permission $permission)
+    public function remove(PivotRoleToPermissionRequest $request, Role $role)
     {
         DB::beginTransaction();
 
         try {
-            $userIds = $request->input('users');
+            $permissionIds = $request->input('permissions') ?? [];
 
-            $data = $permission->users()->detach($userIds);
+            $data = $role->permissions()->detach($permissionIds);
 
             DB::commit();
 
@@ -89,16 +89,16 @@ class PivotPermissionToUserController extends Controller
     }
 
     /**
-     * Remove todaos os usuários da permissão e adiciona os usuários vindas do request.
+     * Remove todas as permissões do papel e adiciona as permissões vindas do request.
      */
-    public function redefine(PivotPermissionToUserRequest $request, Permission $permission)
+    public function redefine(PivotRoleToPermissionRequest $request, Role $role)
     {
         DB::beginTransaction();
 
         try {
-            $userIds = $request->input('users') ?? [];
+            $permissionIds = $request->input('permissions') ?? [];
 
-            $data = $permission->users()->sync($userIds);
+            $data = $role->permissions()->sync($permissionIds);
 
             DB::commit();
 

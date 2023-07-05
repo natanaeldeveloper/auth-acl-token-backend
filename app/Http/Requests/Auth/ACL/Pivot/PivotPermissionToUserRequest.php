@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth\ACL;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Request;
+use App\Rules\ArrayExistsInDatabase;
 
-class StoreRoleRequest extends Request
+class PivotPermissionToUserRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +23,11 @@ class StoreRoleRequest extends Request
     public function rules(): array
     {
         return [
-            'name' => 'required|min:3|max:255|unique:roles',
-            'description' => 'required|max:255'
+            'users' => [
+                'nullable',
+                'array',
+                new ArrayExistsInDatabase('users', 'id'),
+            ]
         ];
     }
 }

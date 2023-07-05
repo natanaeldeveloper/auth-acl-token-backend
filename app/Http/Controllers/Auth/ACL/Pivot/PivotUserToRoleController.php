@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Pivot;
+namespace App\Http\Controllers\Auth\ACL\Pivot;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Pivot\PivotUserToPermissionRequest;
+use App\Http\Requests\Auth\ACL\PivotUserToRoleRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-class PivotUserToPermissionController extends Controller
+class PivotUserToRoleController extends Controller
 {
     /**
-     * Lista as permissões do usuário.
+     * Lista os papeis do usuário.
      */
     public function index(User $user)
     {
-        // retorna as permissões do usuário paginados.
-        $data = $user->permissions()->paginate(10);
+        // retorna os papeis do usuário paginados.
+        $data = $user->roles()->paginate(10);
 
         return response()->json([
             'data' => $data
@@ -23,19 +23,19 @@ class PivotUserToPermissionController extends Controller
     }
 
     /**
-     * Adiciona as permissões vindas do request ao usuário.
+     * Adiciona as papeis vindos do request ao usuário.
      */
-    public function store(PivotUserToPermissionRequest $request, User $user)
+    public function store(PivotUserToRoleRequest $request, User $user)
     {
         DB::beginTransaction();
 
         try {
-            $permissionIds = $request->input('permissions') ?? [];
+            $roleIds = $request->input('roles') ?? [];
 
-            $existingIds = DB::table('users_permissions')
+            $existingIds = DB::table('users_roles')
                 ->where('user_id', $user->id)
-                ->select('permission_id')
-                ->pluck('permission_id')
+                ->select('role_id')
+                ->pluck('role_id')
                 ->toArray();
 
             /**
@@ -43,12 +43,12 @@ class PivotUserToPermissionController extends Controller
              *  registros duplicados, por isso, a filtragem é feita a mão.
              */
 
-            // filtra o ID das permissões que ainda não foram vinculadas ao usuário.
-            $includeIds = array_filter($permissionIds, function ($value) use ($existingIds) {
+            // filtra o ID dos papeis que ainda não foram vinculadas ao usuário.
+            $includeIds = array_filter($roleIds, function ($value) use ($existingIds) {
                 return !in_array($value, $existingIds);
             });
 
-            $user->permissions()->attach($includeIds);
+            $user->roles()->attach($includeIds);
 
             $data = count($includeIds);
 
@@ -59,22 +59,22 @@ class PivotUserToPermissionController extends Controller
                 'message'   => __('messages.created.success'),
                 'data'      => $data,
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
             DB::rollBack();
         }
     }
 
     /**
-     * Remove todas as permissões do usuário.
+     * Remove todos os papeis do usuário.
      */
-    public function remove(PivotUserToPermissionRequest $request, User $user)
+    public function remove(PivotUserToRoleRequest $request, User $user)
     {
         DB::beginTransaction();
 
         try {
-            $permissionIds = $request->input('permissions') ?? [];
+            $roleIds = $request->input('roles') ?? [];
 
-            $data = $user->permissions()->detach($permissionIds);
+            $data = $user->roles()->detach($roleIds);
 
             DB::commit();
 
@@ -83,22 +83,22 @@ class PivotUserToPermissionController extends Controller
                 'message'   => __('messages.deleted.success'),
                 'data'      => $data,
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
             DB::rollBack();
         }
     }
 
     /**
-     * Remove todas as permissões do usuário e adiciona as permissões vindas do request.
+     * Remove todos os papeis do usuário e adiciona os papeis vindos do request.
      */
-    public function redefine(PivotUserToPermissionRequest $request, User $user)
+    public function redefine(PivotUserToRoleRequest $request, User $user)
     {
         DB::beginTransaction();
 
         try {
-            $permissionIds = $request->input('permissions') ?? [];
+            $roleIds = $request->input('roles') ?? [];
 
-            $data = $user->permissions()->sync($permissionIds);
+            $data = $user->roles()->sync($roleIds);
 
             DB::commit();
 
@@ -107,7 +107,7 @@ class PivotUserToPermissionController extends Controller
                 'message'   => __('messages.updated.success'),
                 'data'      => $data,
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Throwable $th) {
             DB::rollBack();
         }
     }

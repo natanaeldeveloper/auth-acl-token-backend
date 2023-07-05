@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
+use App\Http\Requests\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StorePermissionRequest extends Request
+class UpdatePermissionRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +23,12 @@ class StorePermissionRequest extends Request
      */
     public function rules(): array
     {
+        $permissionId = $this->route('permission');
+
         return [
-            'name' => 'required|min:3|max:255|unique:permissions',
+            'name' => 'required|min:3|max:255|' . Rule::unique('permissions', 'name')->ignore($permissionId),
             'description' => 'required|max:255',
-            'permission_id' => 'nullable|'.Rule::exists('permissions', 'id'),
+            'permission_id' => 'nullable|'.Rule::exists('permissions','id'),
         ];
     }
 }
