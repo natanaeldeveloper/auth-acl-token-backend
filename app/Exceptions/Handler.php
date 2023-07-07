@@ -4,10 +4,12 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -30,12 +32,14 @@ class Handler extends ExceptionHandler
      * @var array<string<string, int>>
      */
     protected $errorMappings = [
-        ValidationException::class => ['validation_error', Response::HTTP_UNPROCESSABLE_ENTITY],
-        NotFoundHttpException::class => ['not_found_error', Response::HTTP_NOT_FOUND],
-        AuthorizationException::class => ['authorization_error', Response::HTTP_FORBIDDEN],
-        AccessDeniedHttpException::class => ['authorization_error', Response::HTTP_UNAUTHORIZED],
-        AuthenticationException::class => ['authentication_error', Response::HTTP_UNAUTHORIZED],
-        MethodNotAllowedHttpException::class => ['method_not_allowed_error', Response::HTTP_METHOD_NOT_ALLOWED]
+        AccessDeniedHttpException::class => ['401', Response::HTTP_UNAUTHORIZED],
+        AuthorizationException::class => ['403', Response::HTTP_FORBIDDEN],
+        NotFoundHttpException::class => ['404', Response::HTTP_NOT_FOUND],
+        AuthenticationException::class => ['401', Response::HTTP_UNAUTHORIZED],
+        MethodNotAllowedHttpException::class => ['405', Response::HTTP_METHOD_NOT_ALLOWED],
+        ValidationException::class => ['422', Response::HTTP_UNPROCESSABLE_ENTITY],
+        InternalErrorException::class => ['500', Response::HTTP_INTERNAL_SERVER_ERROR],
+        QueryException::class => ['503', Response::HTTP_SERVICE_UNAVAILABLE],
     ];
 
     /**
@@ -46,9 +50,9 @@ class Handler extends ExceptionHandler
         $this->renderable(function (Throwable $e) {
 
             $errorClass = get_class($e);
-            $errorKey   = $this->errorMappings[$errorClass][0] ?? 'internal_server_error';
+            $errorKey   = $this->errorMappings[$errorClass][0] ?? '500';
             $statusCode = $this->errorMappings[$errorClass][1] ?? Response::HTTP_INTERNAL_SERVER_ERROR;
-            $message    = __('exceptions.' . $errorKey) ?? 'Internal Server Error';
+            $message    = __('messages.exceptions.' . $errorKey) ?? 'Internal Server Error';
             $time       = Carbon::now();
 
             //erros esperados com formatação diferenciada
@@ -63,7 +67,6 @@ class Handler extends ExceptionHandler
                 ], $statusCode);
             }
             else { //erros esperados com formatação comun
-
 
                 $response = response()->json([
                     'status'        => 'error',
