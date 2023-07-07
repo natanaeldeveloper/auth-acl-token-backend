@@ -11,21 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orgaos', function (Blueprint $table) {
+        Schema::create('tipos_anexos_orgaos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tipo_orgao_id');
-            $table->foreignId('orgao_id')->nullable();
-            $table->string('nome');
-            $table->string('sigla')->nullable();
+            $table->foreignId('orgao_id');
+            $table->foreignId('tipo_anexo_id');
             $table->timestamps();
-
-            $table->foreign('tipo_orgao_id')
-                ->references('id')
-                ->on('tipos_orgaos');
 
             $table->foreign('orgao_id')
                 ->references('id')
                 ->on('orgaos');
+
+            $table->foreign('tipo_anexo_id')
+                ->references('id')
+                ->on('tipos_anexos');
         });
     }
 
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orgaos');
+        Schema::dropIfExists('tipos_anexos_orgaos');
     }
 };

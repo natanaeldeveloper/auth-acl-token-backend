@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tipo_anexos', function (Blueprint $table) {
+        Schema::create('tipos_anexos', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('modelo');
+            $table->text('modelo');
             $table->string('cor');
+            $table->boolean('requer_assinatura');
+            $table->boolean('ativo');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tipo_anexos');
+        Schema::dropIfExists('tipos_anexos');
     }
 };
