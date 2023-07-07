@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Auth\ACL;
+namespace App\Http\Controllers\ACL;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePermissionRequest;
-use App\Http\Requests\UpdatePermissionRequest;
+use App\Http\Requests\ACL\StorePermissionRequest;
+use App\Http\Requests\ACL\UpdatePermissionRequest;
 use App\Models\Permission;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class PermissionController extends Controller
@@ -13,8 +14,12 @@ class PermissionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->user()->tokenCan('user_access:list')) {
+            throw new AuthorizationException;
+        }
+
         $permissions = Permission::orderBy('name')->paginate(10);
 
         return response()->json($permissions);
@@ -37,8 +42,12 @@ class PermissionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Permission $permission)
+    public function show(Request $request, Permission $permission)
     {
+        if($request->user()->tokenCan('user_access:list')) {
+            throw new AuthorizationException;
+        }
+
         return response()->json([
             'data' => $permission,
         ]);
@@ -61,8 +70,12 @@ class PermissionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Permission $permission)
+    public function destroy(Request $request, Permission $permission)
     {
+        if($request->user()->tokenCan('user_access:write')) {
+            throw new AuthorizationException;
+        }
+
         $permission->delete();
 
         return response()->json([
