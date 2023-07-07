@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends Request
@@ -11,7 +12,23 @@ class UpdateUserRequest extends Request
      */
     public function authorize(): bool
     {
-        return $this->instance()->user()->tokenCan('user:write');
+        $userEdit = $this->route('user');
+
+        // usuário a ser editado é super admin mas o usuário logado não possui permissão de edita-lo
+        if($userEdit->isSuperAdmin() && !$this->instance()->user()->tokenCan('admin:user')) {
+            return false;
+        }
+
+        if($this->instance()->user()->tokenCan('user:write')) {
+            return true;
+        }
+
+        if($this->instance()->user()->tokenCan('user:edit') &&
+            $userEdit->id == $this->instance()->user()->id) {
+                return true;
+        }
+
+        return false;
     }
 
     /**
