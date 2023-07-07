@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
-Route::post('forgot-password', [ForgotPasswordController::class, 'sendPasswordResetEmail']);
+Route::post('forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendPasswordResetEmail']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -72,4 +71,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/', [App\Http\Controllers\Pivot\PivotPermissionToUserController::class, 'remove']);
         Route::post('redefine', [App\Http\Controllers\Pivot\PivotPermissionToUserController::class, 'redefine']);
     });
+
+    // rotas de tipo de anexo
+    Route::apiResource('tipos-anexos', App\Http\Controllers\TipoAnexoController::class)->names('tipoAnexo');
 });
