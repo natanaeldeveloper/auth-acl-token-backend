@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -14,9 +16,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::orderBy('name')->paginate(10);
+        if(!$request->user()->tokenCan('user:list')) {
+            throw new AuthorizationException;
+        }
 
-        return response()->json($users);
+        return UserResource::collection(User::orderBy('name')->paginate(10));
     }
 
     /**
@@ -26,20 +30,31 @@ class UserController extends Controller
     {
         $user = User::create($request->all());
 
+        $data = new UserResource($user);
+
         return response()->json([
             'status'    => 'success',
             'message'   => __('messages.created.success'),
-            'data'      => $user,
+            'data'      => $data,
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Request $request, User $user)
     {
+        if(!$request->user()->tokenCan('user:list')) {
+
+            if(!$request->user()->tokenCan('user:read') || $request->user()->id !== $user->id) {
+                throw new AuthorizationException;
+            }
+        }
+
+        $data = new UserResource($user);
+
         return response()->json([
-            'data' => $user,
+            'data' => $data,
         ]);
     }
 
@@ -50,18 +65,29 @@ class UserController extends Controller
     {
         $user->update($request->all());
 
+        $data = new UserResource($user);
+
         return response()->json([
             'status'    => 'success',
             'message'   => __('messages.updated.success'),
-            'data'      => $user,
+            'data'      => $data,
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        // usuário a ser editado é super admin mas o usuário logado não possui permissão de edita-lo
+        if($user->isSuperAdmin() && !$this->instance()->user()->tokenCan('admin:user')) {
+            throw new AuthorizationException;
+        }
+
+        if(!$request->user()->tokenCan('user:write')) {
+            throw new AuthorizationException;
+        }
+
         $user->delete();
 
         return response()->json([
