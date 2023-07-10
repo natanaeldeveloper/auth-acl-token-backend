@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateTipoAnexoRequest extends FormRequest
 {
@@ -21,12 +22,17 @@ class UpdateTipoAnexoRequest extends FormRequest
      */
     public function rules(): array
     {
+        $tipoAnexoId = $this->route('tipo_anexo');
+
         return [
-            'nome' => 'required',
-            'modelo' => 'required',
-            'cor' => 'required',
-            'requer_assinatura' => 'required',
-            'ativo' => 'required',
+            'nome' => [
+                'required',
+                Rule::unique('tipos_anexos', 'nome')->ignore($tipoAnexoId),
+            ],
+            'modelo' => ['required'],
+            'cor' => ['required'],
+            'requer_assinatura' => ['required'],
+            'ativo' => ['required'],
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTipoAnexoRequest extends FormRequest
 {
@@ -22,11 +23,14 @@ class StoreTipoAnexoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'required',
-            'modelo' => 'required',
-            'cor' => 'required',
-            'requer_assinatura' => 'required',
-            'ativo' => 'required',
+            'nome' => [
+                'required',
+                Rule::unique('tipos_anexos', 'nome'),
+            ],
+            'modelo' => ['required'],
+            'cor' => ['required'],
+            'requer_assinatura' => ['required'],
+            'ativo' => ['required'],
         ];
     }
 }
