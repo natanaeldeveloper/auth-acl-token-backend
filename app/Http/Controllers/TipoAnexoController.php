@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTipoAnexoRequest;
 use App\Http\Requests\UpdateTipoAnexoRequest;
+use App\Http\Resources\TipoAnexoCollection;
+use App\Http\Resources\TipoAnexoResource;
 use App\Models\TipoAnexo;
 use Illuminate\Http\Request;
 
@@ -16,7 +18,9 @@ class TipoAnexoController extends Controller
     {
         $tipoAnexoList = TipoAnexo::orderBy('nome')->paginate(10);
 
-        return response()->json($tipoAnexoList);
+        $data = new TipoAnexoCollection($tipoAnexoList);
+
+        return response()->json($data);
     }
 
     /**
@@ -26,20 +30,24 @@ class TipoAnexoController extends Controller
     {
         $tipoAnexo = TipoAnexo::create($request->all());
 
+        $data = new TipoAnexoResource($tipoAnexo);
+
         return response()->json([
             'status'    => 'success',
             'message'   => __('messages.created.success'),
-            'data'      => $tipoAnexo
+            'data'      => $data
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(TipoAnexo $tipoAnexo)
+    public function show(Request $request, TipoAnexo $tipoAnexo)
     {
+        $data = new TipoAnexoResource($tipoAnexo);
+
         return response()->json([
-            'data' => $tipoAnexo,
+            'data' => $data,
         ]);
     }
 
@@ -50,10 +58,12 @@ class TipoAnexoController extends Controller
     {
         $tipoAnexo->update($request->all());
 
+        $data = new TipoAnexoResource($tipoAnexo);
+
         return response()->json([
             'status'    => 'success',
             'message'   => __('messages.updated.success'),
-            'data'      => $tipoAnexo
+            'data'      => $data
         ]);
     }
 
