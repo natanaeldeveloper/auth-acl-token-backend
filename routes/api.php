@@ -73,5 +73,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // rotas de tipo de anexo
-    Route::apiResource('tipos-anexos', App\Http\Controllers\TipoAnexoController::class)->names('tipoAnexo');
+    Route::apiResource('tipos-anexo', App\Http\Controllers\TipoAnexoController::class)
+        ->parameters(['tipos-anexo' => 'tipo_anexo'])
+        ->names('tipoAnexo');
 });
