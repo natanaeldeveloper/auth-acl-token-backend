@@ -23,8 +23,18 @@ class Orgao extends Model
         return $this->belongsTo(TipoOrgao::class, 'tipo_orgao_id', 'id');
     }
 
-    public function tiposAnexos()
+    public function tiposAnexo()
     {
         return $this->belongsToMany(TipoAnexo::class, 'tipos_anexos_orgaos', 'orgao_id', 'tipo_anexo_id');
+    }
+
+    public function orgaoResponsavel()
+    {
+        return $this->belongsTo(Orgao::class, 'orgao_id', 'id');
+    }
+
+    public function orgaosPertencentes()
+    {
+        return $this->hasMany(Orgao::class, 'orgao_id', 'id');
     }
 }
