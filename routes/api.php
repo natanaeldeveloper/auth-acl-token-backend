@@ -76,4 +76,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('tipos-anexo', App\Http\Controllers\TipoAnexoController::class)
         ->parameters(['tipos-anexo' => 'tipo_anexo'])
         ->names('tipoAnexo');
+
+    // rotas de orgãos
+    Route::apiResource('orgaos', App\Http\Controllers\OrgaoController::class)->names('orgao');
 });
