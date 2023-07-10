@@ -14,7 +14,9 @@ class TipoAnexo extends Model
     protected $fillable = [
         'nome',
         'modelo',
-        'cor'
+        'cor',
+        'requer_assinatura',
+        'ativo'
     ];
 
     public function orgaos()
