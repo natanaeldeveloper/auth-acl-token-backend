@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Pivot;
+namespace App\Http\Requests\ACL;
 
 use App\Http\Requests\Request;
-use App\Rules\ArrayExistsInDatabase;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class PivotUserToRoleRequest extends Request
+class StorePermissionRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +24,9 @@ class PivotUserToRoleRequest extends Request
     public function rules(): array
     {
         return [
-            'roles' => [
-                'nullable',
-                'array',
-                new ArrayExistsInDatabase('roles', 'id'),
-            ]
+            'name' => 'required|min:3|max:255|unique:permissions',
+            'description' => 'required|max:255',
+            'permission_id' => 'nullable|'.Rule::exists('permissions', 'id'),
         ];
     }
 }

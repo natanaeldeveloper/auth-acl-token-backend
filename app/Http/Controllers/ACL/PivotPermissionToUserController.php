@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Pivot;
+namespace App\Http\Controllers\ACL;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Pivot\PivotUserToRoleRequest;
-use App\Models\User;
+use App\Http\Requests\ACL\PivotPermissionToUserRequest;
+use App\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
-class PivotUserToRoleController extends Controller
+class PivotPermissionToUserController extends Controller
 {
     /**
-     * Lista os papeis do usuário.
+     * Lista os usuários da permissão.
      */
-    public function index(User $user)
+    public function index(Permission $permission)
     {
-        // retorna os papeis do usuário paginados.
-        $data = $user->roles()->paginate(10);
+        // retorna os usuários da permissão paginados.
+        $data = $permission->users()->paginate(10);
 
         return response()->json([
             'data' => $data
@@ -23,19 +23,19 @@ class PivotUserToRoleController extends Controller
     }
 
     /**
-     * Adiciona as papeis vindos do request ao usuário.
+     * Adiciona os usuários vindos do request a permissão.
      */
-    public function store(PivotUserToRoleRequest $request, User $user)
+    public function store(PivotPermissionToUserRequest $request, Permission $permission)
     {
         DB::beginTransaction();
 
         try {
-            $roleIds = $request->input('roles') ?? [];
+            $userIds = $request->input('users') ?? [];
 
             $existingIds = DB::table('users_roles')
-                ->where('user_id', $user->id)
-                ->select('role_id')
-                ->pluck('role_id')
+                ->where('role_id', $permission->id)
+                ->select('user_id')
+                ->pluck('user_id')
                 ->toArray();
 
             /**
@@ -43,12 +43,12 @@ class PivotUserToRoleController extends Controller
              *  registros duplicados, por isso, a filtragem é feita a mão.
              */
 
-            // filtra o ID dos papeis que ainda não foram vinculadas ao usuário.
-            $includeIds = array_filter($roleIds, function ($value) use ($existingIds) {
+            // filtra o ID dos usuários que ainda não foram vinculadas a permissão.
+            $includeIds = array_filter($userIds, function ($value) use ($existingIds) {
                 return !in_array($value, $existingIds);
             });
 
-            $user->roles()->attach($includeIds);
+            $permission->users()->attach($includeIds);
 
             $data = count($includeIds);
 
@@ -65,16 +65,16 @@ class PivotUserToRoleController extends Controller
     }
 
     /**
-     * Remove todos os papeis do usuário.
+     * Remove todas os usuários da permissão.
      */
-    public function remove(PivotUserToRoleRequest $request, User $user)
+    public function remove(PivotPermissionToUserRequest $request, Permission $permission)
     {
         DB::beginTransaction();
 
         try {
-            $roleIds = $request->input('roles') ?? [];
+            $userIds = $request->input('users');
 
-            $data = $user->roles()->detach($roleIds);
+            $data = $permission->users()->detach($userIds);
 
             DB::commit();
 
@@ -89,16 +89,16 @@ class PivotUserToRoleController extends Controller
     }
 
     /**
-     * Remove todos os papeis do usuário e adiciona os papeis vindos do request.
+     * Remove todaos os usuários da permissão e adiciona os usuários vindas do request.
      */
-    public function redefine(PivotUserToRoleRequest $request, User $user)
+    public function redefine(PivotPermissionToUserRequest $request, Permission $permission)
     {
         DB::beginTransaction();
 
         try {
-            $roleIds = $request->input('roles') ?? [];
+            $userIds = $request->input('users') ?? [];
 
-            $data = $user->roles()->sync($roleIds);
+            $data = $permission->users()->sync($userIds);
 
             DB::commit();
 

@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $superAdminRoleId = 1;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -46,6 +48,10 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * @var int
+     */
+
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'users_roles');
@@ -54,5 +60,10 @@ class User extends Authenticatable
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'users_permissions');
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->roles->where('id', $this->superAdminRoleId)->count() > 0 ? true : false;
     }
 }

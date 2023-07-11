@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ACL;
 
-use App\Http\Requests\StoreRoleRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ACL\StoreRoleRequest;
+use App\Http\Requests\ACL\UpdateRoleRequest as ACLUpdateRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -46,7 +48,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRoleRequest $request, Role $role)
+    public function update(ACLUpdateRoleRequest $request, Role $role)
     {
         $role->update($request->all());
 
