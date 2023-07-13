@@ -23,9 +23,7 @@ class OrgaoController extends Controller
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
 
-        $data = new OrgaoCollection($orgaos);
-
-        return response()->json($data);
+        return new OrgaoCollection($orgaos);
     }
 
     /**

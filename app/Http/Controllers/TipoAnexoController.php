@@ -18,9 +18,7 @@ class TipoAnexoController extends Controller
     {
         $tiposAnexo= TipoAnexo::orderBy('created_at', 'DESC')->paginate(10);
 
-        $data = new TipoAnexoCollection($tiposAnexo);
-
-        return response()->json($data);
+        return new TipoAnexoCollection($tiposAnexo);
     }
 
     /**
