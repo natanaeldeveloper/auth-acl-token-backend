@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ACL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ACL\PivotRoleToPermissionRequest;
+use App\Http\Resources\ACL\PivotRoleToPermissionCollection;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
@@ -15,11 +16,7 @@ class PivotRoleToPermissionController extends Controller
     public function index(Role $role)
     {
         // retorna as permissões do papel paginados.
-        $data = $role->permissions()->paginate(10);
-
-        return response()->json([
-            'data' => $data
-        ]);
+        return new PivotRoleToPermissionCollection($role->permissions()->get());
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ACL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ACL\PivotRoleToUserRequest;
+use App\Http\Resources\ACL\PivotRoleToUserCollection;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
@@ -15,11 +16,7 @@ class PivotRoleToUserController extends Controller
     public function index(Role $role)
     {
         // retorna os usuários do papel paginados.
-        $data = $role->users()->paginate(10);
-
-        return response()->json([
-            'data' => $data
-        ]);
+        return new PivotRoleToUserCollection($role->users()->get());
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Hateoas;
+namespace App\Hateoas\ACL;
 
 use App\Models\Role;
 use GDebrauwer\Hateoas\Link;
@@ -12,46 +12,26 @@ class RoleHateoas
 
     public function self(Role $role) : ?Link
     {
-        if(!request()->user()->tokenCan('user_access:list')) {
-            return null;
-        }
-
         return $this->link('role.show', ['role' => $role]);
     }
 
     public function update(Role $role) : ?Link
     {
-        if(!request()->user()->tokenCan('user_access:write')) {
-            return null;
-        }
-
         return $this->link('role.update', ['role' => $role]);
     }
 
     public function remove(Role $role) : ?Link
     {
-        if(!request()->user()->tokenCan('user_access:write')) {
-            return null;
-        }
-
         return $this->link('role.destroy', ['role' => $role]);
     }
 
     public function users(Role $role) : ?Link
     {
-        if(!request()->user()->tokenCan('user_access:list')) {
-            return null;
-        }
-
         return $this->link('role.user.index', ['role' => $role]);
     }
 
     public function permissions(Role $role) : ?Link
     {
-        if(!request()->user()->tokenCan('user_access:list')) {
-            return null;
-        }
-
         return $this->link('role.permission.index', ['role' => $role]);
     }
 }

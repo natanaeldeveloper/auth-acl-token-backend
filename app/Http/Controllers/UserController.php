@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Request;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -16,11 +17,9 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if(!$request->user()->tokenCan('user:list')) {
-            throw new AuthorizationException;
-        }
+        $data = new UserCollection(User::orderBy('name')->paginate(10));
 
-        return UserResource::collection(User::orderBy('name')->paginate(10));
+        return response()->json($data);
     }
 
     /**
@@ -44,13 +43,6 @@ class UserController extends Controller
      */
     public function show(Request $request, User $user)
     {
-        if(!$request->user()->tokenCan('user:list')) {
-
-            if(!$request->user()->tokenCan('user:read') || $request->user()->id !== $user->id) {
-                throw new AuthorizationException;
-            }
-        }
-
         $data = new UserResource($user);
 
         return response()->json([
@@ -79,15 +71,6 @@ class UserController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
-        // usuário a ser editado é super admin mas o usuário logado não possui permissão de edita-lo
-        if($user->isSuperAdmin() && !$this->instance()->user()->tokenCan('admin:user')) {
-            throw new AuthorizationException;
-        }
-
-        if(!$request->user()->tokenCan('user:write')) {
-            throw new AuthorizationException;
-        }
-
         $user->delete();
 
         return response()->json([

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\ACL;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ACL\StorePermissionRequest;
 use App\Http\Requests\ACL\UpdatePermissionRequest;
+use App\Http\Requests\Request;
+use App\Http\Resources\ACL\PermissionCollection;
+use App\Http\Resources\ACL\PermissionResource;
 use App\Models\Permission;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
@@ -16,13 +18,7 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->user()->tokenCan('user_access:list')) {
-            throw new AuthorizationException;
-        }
-
-        $permissions = Permission::orderBy('name')->paginate(10);
-
-        return response()->json($permissions);
+        return new PermissionCollection(Permission::orderBy('name')->paginate(10));
     }
 
     /**
@@ -30,12 +26,12 @@ class PermissionController extends Controller
      */
     public function store(StorePermissionRequest $request)
     {
-        $permission = Permission::create($request->all());
+        $data = new PermissionResource(Permission::create($request->all()));
 
         return response()->json([
             'status'    => 'success',
             'message'   => __('messages.created.success'),
-            'data'      => $permission,
+            'data'      => $data,
         ], 201);
     }
 
@@ -44,12 +40,10 @@ class PermissionController extends Controller
      */
     public function show(Request $request, Permission $permission)
     {
-        if($request->user()->tokenCan('user_access:list')) {
-            throw new AuthorizationException;
-        }
+        $data = new PermissionResource($permission);
 
         return response()->json([
-            'data' => $permission,
+            'data' => $data,
         ]);
     }
 
@@ -60,10 +54,12 @@ class PermissionController extends Controller
     {
         $permission->update($request->all());
 
+        $data = new PermissionResource($permission);
+
         return response()->json([
             'status'    => 'success',
             'message'   => __('messages.updated.success'),
-            'data'      => $permission,
+            'data'      => $data,
         ]);
     }
 
@@ -72,10 +68,6 @@ class PermissionController extends Controller
      */
     public function destroy(Request $request, Permission $permission)
     {
-        if($request->user()->tokenCan('user_access:write')) {
-            throw new AuthorizationException;
-        }
-
         $permission->delete();
 
         return response()->json([

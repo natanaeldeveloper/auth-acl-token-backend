@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ACL;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ACL\PivotPermissionToUserRequest;
+use App\Http\Resources\ACL\PivotPermissionToUserCollection;
 use App\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
@@ -15,11 +16,7 @@ class PivotPermissionToUserController extends Controller
     public function index(Permission $permission)
     {
         // retorna os usuários da permissão paginados.
-        $data = $permission->users()->paginate(10);
-
-        return response()->json([
-            'data' => $data
-        ]);
+        return new PivotPermissionToUserCollection($permission->users()->get());
     }
 
     /**
