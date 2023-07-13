@@ -22,9 +22,15 @@ class UpdateUserRequest extends Request
      */
     public function rules(): array
     {
+        $user = $this->route('user');
+
         return [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|' . Rule::unique('users', 'email')->ignore($this->route('user')),
+            'name' => ['required', 'max:255'],
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user)],
+            'nome_pai' => ['max:255'],
+            'nome_mae' => ['max:255'],
+            'cpf' => ['max:255', Rule::unique('users', 'cpf')->ignore($user)],
+            'orgao_id' => ['required', Rule::exists('orgaos', 'id')],
         ];
     }
 }

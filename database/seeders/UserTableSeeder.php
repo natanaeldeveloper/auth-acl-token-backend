@@ -16,18 +16,21 @@ class UserTableSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Super Administrator',
             'email' => 'superadmin@fabricainfo.com',
+            'orgao_id' => 1,
             'password' => Hash::make('superadmin@2023'),
         ])->roles()->attach([1]);
 
         \App\Models\User::factory()->create([
             'name' => 'Administrador',
             'email' => 'admin@fabricainfo.com',
+            'orgao_id' => 2,
             'password' => Hash::make('admin@2023'),
         ])->roles()->attach([2]);
 
         \App\Models\User::factory()->create([
             'name' => 'Moderador',
             'email' => 'moderador@fabricainfo.com',
+            'orgao_id' => 2,
             'password' => Hash::make('moderador@2023'),
         ])->roles()->attach([3]);
     }

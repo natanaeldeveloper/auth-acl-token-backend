@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = new UserCollection(User::orderBy('name')->paginate(10));
+        $data = new UserCollection(User::with('orgao', 'orgao.tipoOrgao')->orderBy('name')->paginate(10));
 
         return response()->json($data);
     }

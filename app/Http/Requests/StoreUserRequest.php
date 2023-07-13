@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+
 class StoreUserRequest extends Request
 {
     /**
@@ -20,10 +22,14 @@ class StoreUserRequest extends Request
     public function rules(): array
     {
         return [
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'password_confirmation' => 'required|same:password'
+            'name' => ['required', 'max:255'],
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
+            'nome_pai' => ['max:255'],
+            'nome_mae' => ['max:255'],
+            'cpf' => ['max:255', Rule::unique('users', 'cpf')],
+            'orgao_id' => ['required', Rule::exists('orgaos', 'id')],
+            'password' => ['required', 'min:6'],
+            'password_confirmation' => ['required', 'same:password']
         ];
     }
 }

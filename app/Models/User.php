@@ -29,7 +29,8 @@ class User extends Authenticatable
         'password',
         'cpf',
         'nome_pai',
-        'nome_mae'
+        'nome_mae',
+        'orgao_id',
     ];
 
     /**
@@ -64,6 +65,11 @@ class User extends Authenticatable
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'users_permissions');
+    }
+
+    public function orgao()
+    {
+        return $this->belongsTo(Orgao::class, 'orgao_id', 'id');
     }
 
     public function isSuperAdmin()
