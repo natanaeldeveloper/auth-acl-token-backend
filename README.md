@@ -9,3 +9,22 @@ Padronizar e flexibilizar o gerenciamento de papeis e permissões de usuários d
 
 ## Coleção de rotas (Postman)
 [link para o arquivo](/2023_06_20_110437_collection_postman.json)
+
+## Registros base de permissões
+
+### Papéis
+
+* SUPER ADMINISTRADOR
+* ADMINISTRADOR
+* MODERADOR
+* USUÁRIO REGULAR
+
+### Permissões
+
+* `admin`
+    * `admin:user`
+    * `admin:user_acl`
+* `user`
+    * `list:user`
+    * `read:user`
+    * `edit:user`

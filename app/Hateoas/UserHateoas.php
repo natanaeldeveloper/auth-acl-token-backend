@@ -12,46 +12,26 @@ class UserHateoas
 
     public function self(User $user) : ?Link
     {
-        if(!request()->user()->tokenCan('user:read')) {
-            return null;
-        }
-
         return $this->link('user.show', ['user' => $user]);
     }
 
     public function update(User $user) : ?Link
     {
-        if(!request()->user()->tokenCan('user:edit')) {
-            return null;
-        }
-
         return $this->link('user.update', ['user' => $user]);
     }
 
     public function delete(User $user) : ?Link
     {
-        if(!request()->user()->tokenCan('user:write')) {
-            return null;
-        }
-
         return $this->link('user.destroy', ['user' => $user]);
     }
 
     public function permissions(User $user) : ?Link
     {
-        if(!request()->user()->tokenCan('user_access:list')) {
-            return null;
-        }
-
         return $this->link('user.permission.index', ['user' => $user]);
     }
 
     public function roles(User $user) : ?Link
     {
-        if(!request()->user()->tokenCan('user_access:list')) {
-            return null;
-        }
-
         return $this->link('user.role.index', ['user' => $user]);
     }
 }

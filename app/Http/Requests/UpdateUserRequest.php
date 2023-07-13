@@ -12,23 +12,7 @@ class UpdateUserRequest extends Request
      */
     public function authorize(): bool
     {
-        $userEdit = $this->route('user');
-
-        // usuário a ser editado é super admin mas o usuário logado não possui permissão de edita-lo
-        if($userEdit->isSuperAdmin() && !$this->instance()->user()->tokenCan('admin:user')) {
-            return false;
-        }
-
-        if($this->instance()->user()->tokenCan('user:write')) {
-            return true;
-        }
-
-        if($this->instance()->user()->tokenCan('user:edit') &&
-            $userEdit->id == $this->instance()->user()->id) {
-                return true;
-        }
-
-        return false;
+        return true;
     }
 
     /**
@@ -38,11 +22,9 @@ class UpdateUserRequest extends Request
      */
     public function rules(): array
     {
-        $userId = $this->route('user');
-
         return [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|' . Rule::unique('users', 'email')->ignore($userId)
+            'email' => 'required|email|max:255|' . Rule::unique('users', 'email')->ignore($this->route('user')),
         ];
     }
 }

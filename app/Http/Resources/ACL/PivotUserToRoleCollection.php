@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\ACL;
 
+use GDebrauwer\Hateoas\Traits\HasLinks;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class RoleCollection extends ResourceCollection
+class PivotUserToRoleCollection extends ResourceCollection
 {
+    use HasLinks;
+
     /**
      * Transform the resource collection into an array.
      *
@@ -15,7 +18,8 @@ class RoleCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'data' => $this->collection,
+            'data' => RoleResource::collection($this->collection),
+            '_links' => $this->links(\App\Hateoas\ACL\PivotUserToRoleHateoas::class),
         ];
     }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ACL\StoreRoleRequest;
 use App\Http\Requests\ACL\UpdateRoleRequest as ACLUpdateRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
+use App\Http\Resources\ACL\RoleCollection;
+use App\Http\Resources\ACL\RoleResource;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
@@ -16,9 +18,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::orderBy('name')->paginate(10);
-
-        return response()->json($roles);
+        return new RoleCollection(Role::orderBy('name')->paginate(10));
     }
 
     /**
@@ -26,12 +26,12 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        $role = Role::create($request->all());
+        $data = new RoleResource(Role::create($request->all()));
 
         return response()->json([
             'status'    => 'success',
             'message'   => __('messages.created.success'),
-            'data'      => $role,
+            'data'      => $data,
         ], 201);
     }
 
@@ -40,8 +40,10 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $data = new RoleResource($role);
+
         return response()->json([
-            'data' => $role,
+            'data' => $data,
         ]);
     }
 
@@ -52,10 +54,12 @@ class RoleController extends Controller
     {
         $role->update($request->all());
 
+        $data = new RoleResource($role);
+
         return response()->json([
             'status'    => 'success',
             'message'   => __('messages.updated.success'),
-            'data'      => $role,
+            'data'      => $data,
         ]);
     }
 

@@ -9,7 +9,7 @@ class StoreUserRequest extends Request
      */
     public function authorize(): bool
     {
-        return $this->instance()->user()->tokenCan('user:write');
+        return true;
     }
 
     /**

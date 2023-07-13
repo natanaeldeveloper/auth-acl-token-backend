@@ -18,11 +18,9 @@ class AddCustomParameter
     {
         $response = $next($request);
 
-        if ($request->ajax()) {
-            $responseData = $response->getData();
-            $responseData->time = Carbon::now();
-            $response->setData($responseData);
-        }
+        $responseData = $response->getData();
+        $responseData->time = Carbon::now();
+        $response->setData($responseData);
 
         return $response;
     }

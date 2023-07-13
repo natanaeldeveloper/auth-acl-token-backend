@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\ACL;
 
 use GDebrauwer\Hateoas\Traits\HasLinks;
 use Illuminate\Http\Request;
@@ -23,7 +23,7 @@ class RoleResource extends JsonResource
             'description' => $this->description,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            '_links' => $this->links(),
+            '_links' => $this->links(\App\Hateoas\ACL\RoleHateoas::class),
         ];
     }
 }

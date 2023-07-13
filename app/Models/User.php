@@ -10,7 +10,11 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
+
+    use HasApiTokens {
+        tokenCan as traitTokenCan;
+    }
 
     protected $superAdminRoleId = 1;
 
@@ -62,5 +66,20 @@ class User extends Authenticatable
     public function isSuperAdmin()
     {
         return $this->roles->where('id', $this->superAdminRoleId)->count() > 0 ? true : false;
+    }
+
+    /**
+     * Determine if the current API token has a given scope.
+     *
+     * @param  string  $ability
+     * @return bool
+     */
+    public function tokenCan(string $ability)
+    {
+        if($this->isSuperAdmin()) {
+            return true;
+        }
+
+        return $this->traitTokenCan($ability);
     }
 }

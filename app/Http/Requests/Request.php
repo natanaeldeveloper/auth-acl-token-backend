@@ -8,5 +8,5 @@ use Illuminate\Validation\ValidationException;
 
 class Request extends FormRequest
 {
-    //...
+    //
 }
