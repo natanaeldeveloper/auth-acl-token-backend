@@ -79,4 +79,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // rotas de orgãos
     Route::apiResource('orgaos', App\Http\Controllers\OrgaoController::class)->names('orgao');
+
+    Route::apiResource('processos', App\Http\Controllers\ProcessoController::class)->names('processo');
+
 });
