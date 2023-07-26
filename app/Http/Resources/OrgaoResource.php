@@ -22,13 +22,16 @@ class OrgaoResource extends JsonResource
         return [
             'id' => $this->id,
             'nome' => $this->nome,
-            'tipo_orgao' => new TipoOrgaoResource($this->tipoOrgao),
+            'tipo_orgao' => [
+                'id' => $this->tipoOrgao->id,
+                'nome' => $this->tipoOrgao->nome,
+            ],
             'orgao_responsavel' => $this->orgaoResponsavel ? [
                 'id' => $this->orgaoResponsavel->id,
                 'nome' => $this->orgaoResponsavel->nome,
                 'sigla' => $this->orgaoResponsavel->sigla,
             ] : null,
-            'tipos_anexo' => $this->tiposAnexo->map(function ($tipoAnexo) {
+            'tipos_anexos' => $this->tiposAnexos->map(function ($tipoAnexo) {
                 return [
                     'id' => $tipoAnexo->id,
                     'nome' => $tipoAnexo->nome,

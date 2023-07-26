@@ -23,7 +23,7 @@ class StoreProcessoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'valor_estimado' => ['required', 'regex:/^\d{1,3}(\.\d{3})*(,\d{2})?$/'],
+            'valor_estimado' => ['required', 'regex:/^\d{1,3}(?:\.\d{3})*(?:,\d{2})?$/'],
             'objeto' => ['required'],
             'solicitante_id' => ['required', Rule::exists('users', 'id')],
         ];

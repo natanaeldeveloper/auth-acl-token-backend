@@ -26,9 +26,9 @@ class Processo extends Model
     public function valorEstimado(): Attribute
     {
         return Attribute::make(
-            set: fn (string $value) => str_replace(',', '')
-            get: fn (string $value) => ucfirst($value),
-        )
+            set: fn (string $value) => str_replace(',', '.', str_replace('.', '', $value)),
+            get: fn (string $value) => number_format($value, 2, ',', '.'),
+        );
     }
 }
 
