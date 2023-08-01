@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,12 @@ class ProcessoFactory extends Factory
      */
     public function definition(): array
     {
+        $solicitantesId = User::select('id')->get()->pluck('id');
+
         return [
-            //
+            'valor_estimado' => number_format(fake()->randomFloat(2, 0, 1000000000), 2, ',', '.'),
+            'objeto' => fake()->text(500),
+            'solicitante_id' => fake()->randomElement($solicitantesId)
         ];
     }
 }

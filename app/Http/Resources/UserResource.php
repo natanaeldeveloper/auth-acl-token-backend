@@ -27,7 +27,10 @@ class UserResource extends JsonResource
                 'id' => $this->orgao->id,
                 'nome' => $this->orgao->nome,
                 'sigla' => $this->orgao->descricao,
-                'tipo_orgao' => new TipoOrgaoResource($this->orgao->tipoOrgao),
+                'tipo_orgao' => [
+                    'id' => $this->orgao->tipoOrgao->id,
+                    'nome' => $this->orgao->tipoOrgao->nome,
+                ],
                 'created_at' => $this->orgao->created_at,
                 'updated_at' => $this->orgao->updated_at,
             ],

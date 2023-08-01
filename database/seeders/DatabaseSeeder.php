@@ -26,5 +26,11 @@ class DatabaseSeeder extends Seeder
         $this->call(TipoAnexoTableSeeder::class);
         $this->call(TipoAnexoOrgaoTableSeeder::class);
 
+        $this->call(TipoCaixaPostalSeeder::class);
+
+        $this->call(ProcessoSeeder::class);
+
+        $this->call(CaixaPostalSeeder::class);
+
     }
 }

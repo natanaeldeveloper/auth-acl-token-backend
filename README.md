@@ -23,8 +23,15 @@ Padronizar e flexibilizar o gerenciamento de papeis e permissões de usuários d
 
 * `admin`
     * `admin:user`
-    * `admin:user_acl`
 * `user`
     * `list:user`
     * `read:user`
     * `edit:user`
+* `processo`
+    * `cancelar:processo`
+    * `aditivo:processo`
+    * `editar:processo`
+    * `tramitar:processo`
+    * `baixar:processo`
+* `caixa_saida`
+* `caixa_saida`

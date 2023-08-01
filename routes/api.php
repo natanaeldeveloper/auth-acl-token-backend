@@ -73,13 +73,16 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // rotas de tipo de anexo
-    Route::apiResource('tipos-anexo', App\Http\Controllers\TipoAnexoController::class)
-        ->parameters(['tipos-anexo' => 'tipo_anexo'])
+    Route::apiResource('tipos-anexos', App\Http\Controllers\TipoAnexoController::class)
+        ->parameters(['tipos-anexos' => 'tipo_anexo'])
         ->names('tipoAnexo');
 
     // rotas de orgãos
     Route::apiResource('orgaos', App\Http\Controllers\OrgaoController::class)->names('orgao');
-
     Route::apiResource('processos', App\Http\Controllers\ProcessoController::class)->names('processo');
+
+    Route::get('caixa-entrada', [\App\Http\Controllers\CaixaEntradaController::class, 'index'])->name('caixaEntrada');
+    Route::get('caixa-saida', [\App\Http\Controllers\CaixaSaidaController::class, 'index'])->name('caixaSaida');
+    Route::get('caixa-rascunho', [\App\Http\Controllers\CaixaRascunhoController::class, 'index'])->name('caixaRascunho');
 
 });
