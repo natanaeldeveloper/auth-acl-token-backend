@@ -23,20 +23,8 @@ class RoleTableSeeder extends Seeder
             'id' => 2,
             'name' => 'ADMINISTRADOR',
             'description' => 'Pode gerenciar usuários, permissões e configurações do sistema, contendo limitações em determinadas áreas.'
-        ])->permissions()->attach([1, 3]);
+        ])->permissions()->attach([1, 3, 5, 9, 13, 21, 25, 26, 27]);
 
-        \App\Models\Role::factory()->create([
-            'id' => 3,
-            'name' => 'MODERADOR',
-            'description' => 'Responsável pela moderação e gerenciamento de conteúdo do sistema. Pode aprovar, editar ou excluir conteúdo gerado pelos usuários.'
-        ])->permissions()->attach([3]);
-
-        \App\Models\Role::factory()->create([
-            'id' => 4,
-            'name' => 'USUÁRIO REGULAR',
-            'description' => 'Possui acesso básico às funcionalidades principais do sistema, como visualização, criação e edição de conteúdo.'
-        ])->permissions()->attach([3]);
-
-        DB::statement("SELECT setval(pg_get_serial_sequence('roles', 'id'), 4, false)");
+        DB::statement("SELECT setval(pg_get_serial_sequence('roles', 'id'), 2, false)");
     }
 }
