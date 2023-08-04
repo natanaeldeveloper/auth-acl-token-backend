@@ -45,6 +45,12 @@ Padronizar e flexibilizar o gerenciamento de papeis e permissões de usuários d
     * `create:anexo` - Cadastro de anexo ao processo.
     * `baixar:anexo` - Baixar documento do anexo.
     * `remove:anexo` - Remoção de anexo.
+* `ata` - Todas as permissões de ata.
+    * `write:ata` - Escrita (Cadastro e Edição) de Ata de Registro de Preço.
+    * `read:ata` - Leitura de Ata de Registro de Preço. 
+* `contrato` - Todas as permissões de ata.
+    * `write:contrato` - Escrita (Cadastro e Edição) de Contrato.
+    * `read:contrato` - Leitura de Contrato. 
 * `caixa_entrada` - Define se o usuário possuirá caixa de entrada.
 * `caixa_saida` - Define se o usuário possuirá caixa de saída.
 * `caixa_rascunho` - Define se o usuário possuirá caixa de rascunho.
