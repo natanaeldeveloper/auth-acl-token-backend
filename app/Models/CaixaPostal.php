@@ -31,4 +31,19 @@ class CaixaPostal extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id', 'id');
     }
+
+    public function isCaixaEntrada()
+    {
+        return $this->tipo_caixa_postal === 1;
+    }
+
+    public function isCaixaSaida()
+    {
+        return $this->tipo_caixa_postal === 2;
+    }
+
+    public function isCaixaRascunho()
+    {
+        return $this->tipo_caixa_postal === 3;
+    }
 }
