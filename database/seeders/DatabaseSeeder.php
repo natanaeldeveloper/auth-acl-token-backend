@@ -32,5 +32,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(CaixaPostalSeeder::class);
 
+        $this->call(AnexoSeeder::class);
+
     }
 }
