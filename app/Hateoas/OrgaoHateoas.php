@@ -15,13 +15,13 @@ class OrgaoHateoas
         return $this->link('orgao.show', ['orgao' => $orgao]);
     }
 
-    public function delete(Orgao $orgao) : ?Link
-    {
-        return $this->link('orgao.destroy', ['orgao' => $orgao]);
-    }
-
     public function update(Orgao $orgao) : ?Link
     {
         return $this->link('orgao.update', ['orgao' => $orgao]);
+    }
+
+    public function delete(Orgao $orgao) : ?Link
+    {
+        return $this->link('orgao.destroy', ['orgao' => $orgao]);
     }
 }

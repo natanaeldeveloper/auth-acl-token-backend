@@ -19,17 +19,7 @@ class AnexoHateoas
         return $this->link('processo.anexo.update', ['processo' => $anexo->processo_id, 'anexo' => $anexo->id]);
     }
 
-    public function remove(Anexo $anexo)
-    {
-        return $this->link('processo.anexo.destroy', ['processo' => $anexo->processo_id, 'anexo' => $anexo->id]);
-    }
-
-    public function assinar(Anexo $anexo)
-    {
-        return $this->link('processo.anexo.destroy', ['processo' => $anexo->processo_id, 'anexo' => $anexo->id]);
-    }
-
-    public function download(Anexo $anexo)
+    public function delete(Anexo $anexo)
     {
         return $this->link('processo.anexo.destroy', ['processo' => $anexo->processo_id, 'anexo' => $anexo->id]);
     }

@@ -20,7 +20,7 @@ class ProcessoHateoas
         return $this->link('processo.update', ['processo' => $processo->id]);
     }
 
-    public function remove(Processo $processo) : ?Link
+    public function delete(Processo $processo) : ?Link
     {
         return $this->link('processo.destroy', ['processo' => $processo->id]);
     }

@@ -15,13 +15,13 @@ class TipoAnexoHateoas
         return $this->link('tipoAnexo.show', ['tipo_anexo' => $tipoAnexo]);
     }
 
-    public function delete(TipoAnexo $tipoAnexo) : ?Link
-    {
-        return $this->link('tipoAnexo.destroy', ['tipo_anexo' => $tipoAnexo]);
-    }
-
     public function update(TipoAnexo $tipoAnexo) : ?Link
     {
         return $this->link('tipoAnexo.update', ['tipo_anexo' => $tipoAnexo]);
+    }
+
+    public function delete(TipoAnexo $tipoAnexo) : ?Link
+    {
+        return $this->link('tipoAnexo.destroy', ['tipo_anexo' => $tipoAnexo]);
     }
 }
