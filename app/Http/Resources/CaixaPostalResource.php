@@ -24,7 +24,7 @@ class CaixaPostalResource extends JsonResource
                 'valor_estimado' => $this->processo->valor_estimado,
                 'data_solicitacao' => $this->processo->created_at->format('d/m/Y'),
                 'objeto' => (trim(substr($this->processo->objeto, 0, 50)) . '...'),
-                'solicitante_nome' => $this->processo->solicitante->name,
+                'solicitante_nome' => $this->processo->solicitante->nome,
             ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
