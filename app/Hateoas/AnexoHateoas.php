@@ -23,4 +23,9 @@ class AnexoHateoas
     {
         return $this->link('processo.anexo.destroy', ['processo' => $anexo->processo_id, 'anexo' => $anexo->id]);
     }
+
+    public function download(Anexo $anexo)
+    {
+        return $this->link('processo.anexo.download', ['processo' => $anexo->processo_id, 'anexo' => $anexo->id]);
+    }
 }

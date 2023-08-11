@@ -15,7 +15,9 @@ class AnexoCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'data' => $this->collection,
+            'data' => $this->collection->map(function ($item) {
+                return collect($item)->except(['conteudo']);
+            }),
         ];
     }
 }

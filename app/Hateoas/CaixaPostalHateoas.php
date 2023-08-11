@@ -20,7 +20,7 @@ class CaixaPostalHateoas
         return $this->link('processo.update', ['processo' => $caixaPostal->processo->id]);
     }
 
-    public function delete(CaixaPostal $caixaPostal) : ?Link
+    public function cancelar(CaixaPostal $caixaPostal) : ?Link
     {
         return $this->link('processo.destroy', ['processo' => $caixaPostal->processo->id]);
     }
@@ -31,11 +31,6 @@ class CaixaPostalHateoas
     }
 
     public function tramitar(CaixaPostal $caixaPostal) : ?Link
-    {
-        return $this->link('processo.show', ['processo' => $caixaPostal->processo_id]);
-    }
-
-    public function assinar(CaixaPostal $caixaPostal) : ?Link
     {
         return $this->link('processo.show', ['processo' => $caixaPostal->processo_id]);
     }

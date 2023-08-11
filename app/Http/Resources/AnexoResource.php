@@ -22,6 +22,8 @@ class AnexoResource extends JsonResource
             'id' => $this->id,
             'uuid' => $this->uuid,
             'descricao' => (trim(substr($this->descricao, 0, 50)) . '...'),
+            'por_arquivo' => $this->por_arquivo,
+            'conteudo' => $this->conteudo,
             'tipo_anexo' => [
                 'id' => $this->tipoAnexo->id,
                 'nome' => $this->tipoAnexo->nome,
