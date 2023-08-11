@@ -40,5 +40,14 @@ class StoreAnexoRequest extends FormRequest
             'conteudo' => 'Conteúdo',
             'arquivo' => 'Arquivo',
         ];
+
+    }
+
+    public function passedValidation()
+    {
+        $this->merge([
+            'conteudo' => $this->por_arquivo == 0 ? $this->conteudo : null,
+            'mime_type' => $this->por_arquivo == 1 ? $this->arquivo->getClientMimeType() : null,
+        ]);
     }
 }
