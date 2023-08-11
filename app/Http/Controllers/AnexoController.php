@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAnexoRequest;
+use App\Http\Requests\UpdateAnexoRequest;
 use App\Http\Resources\AnexoCollection;
 use App\Http\Resources\AnexoResource;
 use App\Models\Anexo;
@@ -14,6 +15,8 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
 
 class AnexoController extends Controller
 {
@@ -43,20 +46,12 @@ class AnexoController extends Controller
                 'processo_id' => $processo->id,
             ]));
 
-            if ($request->has('arquivo') && $request->file('arquivo')->isValid()) {
+            if($request->por_arquivo == 1) {
 
                 $path = "processos/{$processo->ano_processo}/{$processo->id}/{$anexo->uuid}";
-
-                if (Storage::disk('public')->exists($path)) {
-                    throw new InternalErrorException("Um arquivo o mesmo UUID: {$anexo->uuid} foi encontrado na pasta do processo.");
-                }
-
-                $file = $request->file('arquivo');
-                $mimeType = $file->getClientMimeType();
+                $file = $request->arquivo;
 
                 Storage::disk('public')->put($path, $file->get());
-
-                $anexo->update(['mime_type' => $mimeType]);
             }
 
             $data = new AnexoResource($anexo);
@@ -89,32 +84,26 @@ class AnexoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Processo $processo, Anexo $anexo)
+    public function update(UpdateAnexoRequest $request, Processo $processo, Anexo $anexo)
     {
-        dd($request->all());
-
         DB::beginTransaction();
 
         try {
             $anexo->update(array_merge($request->all(), [
-                'uuid' => Uuid::uuid4()->toString(),
+                'uuid' => $anexo->uuid,
                 'editor_id' => $request->user()->id,
             ]));
 
-            if ($request->has('arquivo') && $request->file('arquivo')->isValid()) {
+            $path = "processos/{$processo->ano_processo}/{$processo->id}/{$anexo->uuid}";
 
-                $path = "processos/{$processo->ano_processo}/{$processo->id}/{$anexo->uuid}";
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
 
-                if (Storage::disk('public')->exists($path)) {
-                    Storage::disk('public')->delete($path);
-                }
+            if ($request->por_arquivo == 1) {
 
                 $file = $request->file('arquivo');
-                $mimeType = $file->getClientMimeType();;
-
                 Storage::disk('public')->put($path, $file->get());
-
-                $anexo->update(['mime_type' => $mimeType]);
             }
 
             $data = new AnexoResource($anexo);
@@ -135,14 +124,16 @@ class AnexoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($processo, Anexo $anexo)
+    public function destroy(Processo $processo, Anexo $anexo)
     {
         DB::beginTransaction();
 
         try {
             $anexo->delete();
 
-            Storage::disk('public')->delete("processos/{$processo->ano_processo}/{$processo->id}/{$anexo->uuid}");
+            $path = "processos/{$processo->ano_processo}/{$processo->id}/{$anexo->uuid}";
+
+            Storage::disk('public')->delete($path);
 
             DB::commit();
 
@@ -157,20 +148,25 @@ class AnexoController extends Controller
         }
     }
 
-    public function download(Request $request, Processo $processo, Anexo $anexo)
+    public function download(Processo $processo, Anexo $anexo)
     {
-        $path = "processos/{$processo->ano_processo}/{$processo->id}/{$anexo->uuid}";
+        $fileName = mb_strtoupper(str_replace([' ',  '_'], '-', Str::ascii($anexo->descricao)), 'UTF-8');
 
-        if (!Storage::disk('public')->exists($path)) {
-            throw new NotFoundHttpException('Arquivo do anexo não encontrado.');
+        if($anexo->por_arquivo) {
+            $path       = "processos/{$processo->ano_processo}/{$processo->id}/{$anexo->uuid}";
+            $filePath   = storage_path("app/public/".$path);
+
+            if (!Storage::disk('public')->exists($path)) {
+                throw new NotFoundHttpException('Arquivo do anexo não encontrado.');
+            }
+
+            return response()->download($filePath, $fileName, [
+                'Content-Type' => $anexo->mime_type
+            ]);
+        } else {
+            $pdf = Pdf::loadHTML($anexo->conteudo, 'UTF-8');
+
+            return $pdf->stream($fileName . '.pdf');
         }
-
-        $file = Storage::disk('public')->get($path);
-        $fileName = mb_strtoupper(str_replace([' ',  '_'], '-', $anexo->descricao), 'UTF-8');
-
-        return response()->download($file, $fileName, [
-            'Content-Type' => $anexo->mime_type,
-            'Content-Disposition' => 'attachment; filename="' . $fileName . '.pdf"',
-        ]);
     }
 }
