@@ -24,5 +24,25 @@ class CaixaPostalHateoas
     {
         return $this->link('processo.destroy', ['processo' => $caixaPostal->processo->id]);
     }
+
+    public function anexar(CaixaPostal $caixaPostal) : ?Link
+    {
+        return $this->link('processo.show', ['processo' => $caixaPostal->processo_id]);
+    }
+
+    public function tramitar(CaixaPostal $caixaPostal) : ?Link
+    {
+        return $this->link('processo.show', ['processo' => $caixaPostal->processo_id]);
+    }
+
+    public function assinar(CaixaPostal $caixaPostal) : ?Link
+    {
+        return $this->link('processo.show', ['processo' => $caixaPostal->processo_id]);
+    }
+
+    public function baixar(CaixaPostal $caixaPostal) : ?Link
+    {
+        return $this->link('processo.show', ['processo' => $caixaPostal->processo_id]);
+    }
 }
 
