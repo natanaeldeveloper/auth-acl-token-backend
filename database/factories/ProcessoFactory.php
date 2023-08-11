@@ -22,6 +22,8 @@ class ProcessoFactory extends Factory
         return [
             'valor_estimado' => number_format(fake()->randomFloat(2, 0, 1000000000), 2, ',', '.'),
             'objeto' => fake()->text(500),
+            'numero_processo' => fake()->randomNumber() . '/2023',
+            'ano_processo' => 2023,
             'solicitante_id' => fake()->randomElement($solicitantesId)
         ];
     }

@@ -73,17 +73,19 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // rotas de tipo de anexo
-    Route::apiResource('tipos-anexos', App\Http\Controllers\TipoAnexoController::class)
-        ->parameters(['tipos-anexos' => 'tipo_anexo'])
-        ->names('tipoAnexo');
+    Route::apiResource('tipos-anexos', App\Http\Controllers\TipoAnexoController::class)->names('tipoAnexo');
 
     // rotas de orgãos
     Route::apiResource('orgaos', App\Http\Controllers\OrgaoController::class)->names('orgao');
     Route::apiResource('processos', App\Http\Controllers\ProcessoController::class)->names('processo');
 
     Route::prefix('processos/{processo}')->group(function () {
-        Route::apiResource('anexos', \App\Http\Controllers\AnexoController::class)->names('processo.anexo');
+        Route::apiResource('anexos', \App\Http\Controllers\AnexoController::class)->names('processo.anexo')->except('update');
+        Route::get('anexos/{anexo}/download', [\App\Http\Controllers\AnexoController::class, 'download'])->name('processo.anexo.download');
     });
+
+    Route::put('processos/{processo}/anexos/{anexo}', [\App\Http\Controllers\AnexoController::class, 'update'])->name('processo.anexo.update');
+
 
     Route::get('caixa-entrada', [\App\Http\Controllers\CaixaEntradaController::class, 'index'])->name('caixaEntrada');
     Route::get('caixa-saida', [\App\Http\Controllers\CaixaSaidaController::class, 'index'])->name('caixaSaida');

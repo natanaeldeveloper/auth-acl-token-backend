@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,6 +18,9 @@ class User extends Authenticatable
         tokenCan as traitTokenCan;
     }
 
+    /**
+     * @var int
+     */
     protected $superAdminRoleId = 1;
 
     /**
@@ -53,9 +58,17 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    /**
-     * @var int
-     */
+    public function cpf(): Attribute
+    {
+        return Attribute::make(
+            get: function (string $value) {
+                return preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $value);
+            },
+            set: function (string $value) {
+                return str_replace([',', '.', '-', ' '], '', $value);
+            }
+        );
+    }
 
     public function roles()
     {
@@ -85,7 +98,7 @@ class User extends Authenticatable
      */
     public function tokenCan(string $ability)
     {
-        if($this->isSuperAdmin()) {
+        if ($this->isSuperAdmin()) {
             return true;
         }
 

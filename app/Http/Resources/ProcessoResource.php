@@ -21,6 +21,8 @@ class ProcessoResource extends JsonResource
             'id' => $this->id,
             'valor_estimado' => $this->valor_estimado,
             'objeto' => $this->objeto,
+            'ano_processo' => $this->ano_processo,
+            'numero_processo' => $this->numero_processo,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'solicitante' => [

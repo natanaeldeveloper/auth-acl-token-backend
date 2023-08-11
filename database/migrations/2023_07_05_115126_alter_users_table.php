@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('cpf')->unique()->nullable();
+            $table->string('cpf');
             $table->string('nome_pai')->nullable();
             $table->string('nome_mae')->nullable();
-            $table->foreignId('orgao_id');
+            $table->foreignId('orgao_id')->nullable();
 
             $table->foreign('orgao_id')
                 ->references('id')

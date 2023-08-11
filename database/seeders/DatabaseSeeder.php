@@ -29,10 +29,10 @@ class DatabaseSeeder extends Seeder
         $this->call(TipoCaixaPostalSeeder::class);
 
         $this->call(ProcessoSeeder::class);
+        $this->call(AnexoSeeder::class);
 
         $this->call(CaixaPostalSeeder::class);
 
-        $this->call(AnexoSeeder::class);
 
     }
 }

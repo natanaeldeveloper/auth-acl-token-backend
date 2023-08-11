@@ -30,7 +30,7 @@ class UpdateOrgaoRequest extends FormRequest
                 'required',
                 Rule::exists('tipos_orgaos', 'id'),
             ],
-            'orgao_id' => [
+            'orgao_responsavel_id' => [
                 // orgão do tipo 'CÉLULA' pertence a outro orgão do tipo 'UNIDADE'
                 'required_if:tipo_orgao_id,2',
                 Rule::exists('orgaos', 'id'),
@@ -41,7 +41,6 @@ class UpdateOrgaoRequest extends FormRequest
                 Rule::unique('orgaos', 'nome')->ignore($orgaoId),
             ],
             'sigla' => [
-                'nullable',
                 'max:255',
             ],
             'tipos_anexo_id' => [
@@ -54,25 +53,25 @@ class UpdateOrgaoRequest extends FormRequest
     {
         return [
             'tipo_orgao_id' => 'Tipo de Orgão',
-            'orgao_id' => 'Unidade Responsável',
+            'orgao_responsavel_id' => 'Unidade Responsável',
             'nome' => 'Nome',
             'sigla' => 'Sigla',
-            'tipos_anexo_id' => 'Tipos de Anexos'
+            'tipos_anexos_id' => 'Tipos de Anexos'
         ];
     }
 
     public function messages()
     {
         return [
-            'orgao_id.required_if' => "O campo :attribute é obrigatório quando o tipo de orgão for 'CÉLULA'.",
-            'orgao_id.nullable_if' => "O campo :attribute deve ser vazio quando o tipo de orgão for 'UNIDADE'.",
+            'orgao_responsavel_id.required_if' => "O campo :attribute é obrigatório quando o tipo de orgão for 'CÉLULA'.",
+            'orgao_responsavel_id.nullable_if' => "O campo :attribute deve ser vazio quando o tipo de orgão for 'UNIDADE'.",
         ];
     }
 
     public function passedValidation()
     {
         $this->merge([
-            'orgao_id' => $this->tipo_orgao_id == 2 ? $this->orgao_id : null,
+            'orgao_responsavel_id' => $this->tipo_orgao_id == 2 ? $this->orgao_responsavel_id : null,
         ]);
     }
 }

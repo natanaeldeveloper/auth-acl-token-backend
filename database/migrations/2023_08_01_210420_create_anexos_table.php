@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('anexos', function (Blueprint $table) {
             $table->id();
             $table->uuid();
-            $table->string('mime_type')->nullable();
             $table->foreignId('processo_id');
             $table->foreignId('tipo_anexo_id');
             $table->foreignId('editor_id');
+            $table->integer('numero_anexo')->nullable();
+            $table->string('mime_type')->nullable();
+            $table->boolean('por_arquivo');
             $table->string('descricao');
             $table->text('conteudo')->nullable();
-            $table->boolean('por_arquivo');
             $table->timestamps();
 
             $table->foreign('processo_id')

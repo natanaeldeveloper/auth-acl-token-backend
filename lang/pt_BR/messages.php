@@ -16,6 +16,8 @@ return [
         'error' => 'Erro ao remover o recurso.',
     ],
 
+    'logout' => 'Logout bem-sucedido.',
+
     "exceptions" => [
         "400" => "A solicitação enviada é inválida.",
         "401" => "A solicitação requer autenticação ou as credenciais fornecidas são inválidas.",

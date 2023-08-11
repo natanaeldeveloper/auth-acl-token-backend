@@ -17,6 +17,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Super Administrator',
             'email' => 'superadmin@example.com',
             'orgao_id' => 1,
+            'cpf' => '10293029300',
             'password' => Hash::make('12345678'),
         ])->roles()->attach([1]);
 
@@ -24,6 +25,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Administrador',
             'email' => 'admin@example.com',
             'orgao_id' => 2,
+            'cpf' => '10293029300',
             'password' => Hash::make('12345678'),
         ])->roles()->attach([2]);
 
@@ -31,6 +33,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Usuário Regular',
             'email' => 'regular@example.com',
             'orgao_id' => 2,
+            'cpf' => '10293029300',
             'password' => Hash::make('12345678'),
         ]);
     }

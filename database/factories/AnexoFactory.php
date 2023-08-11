@@ -27,6 +27,8 @@ class AnexoFactory extends Factory
             'uuid' => fake()->uuid(),
             'processo_id' => fake()->randomElement($processosId),
             'tipo_anexo_id' => fake()->randomElement($tiposAnexosId),
+            'numero_anexo' => fake()->randomElement([fake()->randomElement([1,2,3,4,5,6,7,8,9]), null]),
+            'mime_type' => fake()->mimeType(),
             'editor_id' => fake()->randomElement($editoresId),
             'descricao' => fake()->text(255),
             'conteudo' => fake()->text(2000),

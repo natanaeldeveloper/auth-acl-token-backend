@@ -23,11 +23,8 @@ class StoreTipoAnexoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => [
-                'required',
-                Rule::unique('tipos_anexos', 'nome'),
-            ],
-            'modelo' => ['required'],
+            'nome' => ['required', Rule::unique('tipos_anexos', 'nome')],
+            'modelo' => [],
             'cor' => ['required'],
             'requer_assinatura' => ['required'],
             'ativo' => ['required'],

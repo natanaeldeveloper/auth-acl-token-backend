@@ -30,11 +30,11 @@ class Orgao extends Model
 
     public function orgaoResponsavel()
     {
-        return $this->belongsTo(Orgao::class, 'orgao_id', 'id');
+        return $this->belongsTo(Orgao::class, 'orgao_responsavel_id', 'id');
     }
 
     public function orgaosPertencentes()
     {
-        return $this->hasMany(Orgao::class, 'orgao_id', 'id');
+        return $this->hasMany(Orgao::class, 'orgao_responsavel_id', 'id');
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orgaos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tipo_orgao_id');
-            $table->foreignId('orgao_id')->nullable();
+            $table->foreignId('orgao_responsavel_id')->nullable();
             $table->string('nome');
             $table->string('sigla')->nullable();
             $table->timestamps();
@@ -23,7 +23,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('tipos_orgaos');
 
-            $table->foreign('orgao_id')
+            $table->foreign('orgao_responsavel_id')
                 ->references('id')
                 ->on('orgaos');
         });

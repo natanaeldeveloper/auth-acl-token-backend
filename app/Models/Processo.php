@@ -15,12 +15,19 @@ class Processo extends Model
     protected $fillable = [
         'valor_estimado',
         'objeto',
+        'ano_processo',
         'solicitante_id',
     ];
 
     public function solicitante()
     {
         return $this->belongsTo(User::class, 'solicitante_id', 'id');
+    }
+
+    public function ultimoAnexo()
+    {
+        return $this->hasOne(Anexo::class, 'processo_id', 'id')
+            ->orderBy('created_at', 'DESC');
     }
 
     public function valorEstimado(): Attribute

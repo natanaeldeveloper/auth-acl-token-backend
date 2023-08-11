@@ -29,7 +29,7 @@ class UpdateTipoAnexoRequest extends FormRequest
                 'required',
                 Rule::unique('tipos_anexos', 'nome')->ignore($tipoAnexoId),
             ],
-            'modelo' => ['required'],
+            'modelo' => [],
             'cor' => ['required'],
             'requer_assinatura' => ['required'],
             'ativo' => ['required'],

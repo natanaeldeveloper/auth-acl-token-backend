@@ -15,9 +15,10 @@ class Anexo extends Model
         'processo_id',
         'tipo_anexo_id',
         'editor_id',
+        'numero_anexo',
+        'por_arquivo',
         'descricao',
         'conteudo',
-        'por_arquivo',
         'mime_type',
     ];
 

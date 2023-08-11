@@ -23,7 +23,12 @@ class CaixaEntradaController extends Controller
      */
     public function index(Request $request)
     {
-        $itensCaixaDeEntrada = CaixaPostal::with('processo')
+        $itensCaixaDeEntrada = CaixaPostal::with(
+            'processo',
+            'processo.solicitante',
+            'processo.ultimoAnexo',
+            'processo.ultimoAnexo.tipoAnexo',
+        )
             ->where('usuario_id', $request->user()->id)
             ->where('tipo_caixa_postal_id', $this->tipoCaixaPostalId)
             ->orderBy('created_at', 'DESC')

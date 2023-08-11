@@ -25,6 +25,7 @@ class UpdateProcessoRequest extends FormRequest
         return [
             'valor_estimado' => ['required', 'regex:/^\d{1,3}(?:\.\d{3})*(?:,\d{2})?$/'],
             'objeto' => ['required'],
+            'ano_processo' => ['required', 'integer', 'regex:/^\d{4}$/'],
             'solicitante_id' => ['required', Rule::exists('users', 'id')],
         ];
     }

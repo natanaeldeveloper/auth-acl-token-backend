@@ -21,19 +21,16 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'cpf' => $this->cpf,
+            'nome_pai' => $this->nome_pai,
+            'nome_mae' => $this->nome_mae,
             'orgao' => [
                 'id' => $this->orgao->id,
                 'nome' => $this->orgao->nome,
                 'sigla' => $this->orgao->descricao,
-                'tipo_orgao' => [
-                    'id' => $this->orgao->tipoOrgao->id,
-                    'nome' => $this->orgao->tipoOrgao->nome,
-                ],
-                'created_at' => $this->orgao->created_at,
-                'updated_at' => $this->orgao->updated_at,
             ],
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             '_links' => $this->links(),
         ];
     }

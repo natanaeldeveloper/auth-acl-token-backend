@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('processos', function (Blueprint $table) {
             $table->id();
-            $table->decimal('valor_estimado', 12,2);
-            $table->text('objeto');
             $table->foreignId('solicitante_id');
+            $table->decimal('valor_estimado', 12,2);
+            $table->string('sequencia_processo')->nullable();
+            $table->string('numero_processo')->nullable();
+            $table->integer('ano_processo');
+            $table->text('objeto');
             $table->timestamps();
 
             $table->foreign('solicitante_id')

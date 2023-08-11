@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('tipos_anexos', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->text('modelo');
+            $table->text('modelo')->nullable();
             $table->string('cor');
             $table->boolean('requer_assinatura');
-            $table->boolean('ativo');
+            $table->boolean('ativo')->default(true);
             $table->timestamps();
         });
     }

@@ -33,7 +33,7 @@ class OrgaoController extends Controller
     {
         $orgao = Orgao::create($request->all());
 
-        $orgao->tiposAnexo()->attach($request->tipos_anexo_id);
+        $orgao->tiposAnexos()->attach($request->tipos_anexos_id);
 
         $data = new OrgaoResource($orgao);
 
@@ -63,7 +63,7 @@ class OrgaoController extends Controller
     {
         $orgao->update($request->all());
 
-        $orgao->tiposAnexo()->sync($request->tipos_anexo_id);
+        $orgao->tiposAnexos()->sync($request->tipos_anexos_id);
 
         $data = new OrgaoResource($orgao);
 
@@ -79,7 +79,7 @@ class OrgaoController extends Controller
      */
     public function destroy(Orgao $orgao)
     {
-        $orgao->tiposAnexo()->sync([]);
+        $orgao->tiposAnexos()->sync([]);
         $orgao->delete();
 
         return response()->json([

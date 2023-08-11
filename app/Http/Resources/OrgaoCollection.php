@@ -16,7 +16,7 @@ class OrgaoCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection->map(function ($orgao) {
-                return collect($orgao)->except(['tipos_anexo']);
+                return collect($orgao)->except(['tipos_anexos']);
             }),
         ];
     }

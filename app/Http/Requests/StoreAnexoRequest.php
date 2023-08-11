@@ -26,8 +26,8 @@ class StoreAnexoRequest extends FormRequest
             'tipo_anexo_id' => ['required', 'integer', Rule::exists('tipos_anexos', 'id')],
             'descricao' => ['required', 'max:255'],
             'por_arquivo' => ['required', 'boolean'],
-            'conteudo' => ['required_if:por_arquivo,0', 'max:6000'],
-            'arquivo'  => ['required_if:por_arquivo,1', 'file', 'max:30720'],
+            'conteudo' => ['required_if:por_arquivo,false', 'max:6000'],
+            'arquivo'  => ['required_if:por_arquivo,true', 'file', 'max:30720'],
         ];
     }
 
