@@ -12,10 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Dompdf\Options;
 use Illuminate\Support\Str;
 
 class AnexoController extends Controller
@@ -46,7 +46,7 @@ class AnexoController extends Controller
                 'processo_id' => $processo->id,
             ]));
 
-            if($request->por_arquivo == 1) {
+            if ($request->por_arquivo == 1) {
 
                 $path = "processos/{$processo->ano_processo}/{$processo->id}/{$anexo->uuid}";
                 $file = $request->arquivo;
@@ -152,9 +152,9 @@ class AnexoController extends Controller
     {
         $fileName = mb_strtoupper(str_replace([' ',  '_'], '-', Str::ascii($anexo->descricao)), 'UTF-8');
 
-        if($anexo->por_arquivo) {
+        if ($anexo->por_arquivo) {
             $path       = "processos/{$processo->ano_processo}/{$processo->id}/{$anexo->uuid}";
-            $filePath   = storage_path("app/public/".$path);
+            $filePath   = storage_path("app/public/" . $path);
 
             if (!Storage::disk('public')->exists($path)) {
                 throw new NotFoundHttpException('Arquivo do anexo não encontrado.');
