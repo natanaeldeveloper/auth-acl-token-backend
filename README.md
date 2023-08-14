@@ -4,8 +4,11 @@
 * `php 8.2`
 * `laravel 10`
 
-## Registros base de permissões
+## Documentação de Rotas (Postman)
+* [API Licitação | ALECE](https://documenter.getpostman.com/view/27861358/2s946eADNg#78a2b6dc-66f6-46b7-a127-af4140c29b6f)
+* [Integração PNCP | Vs 2.2.52](https://documenter.getpostman.com/view/27861358/2s946o2oSj#7f25cf8b-f5e3-4f27-b9fb-64f1bf534c47)
 
+## Serviço de Autorização (ACL)
 ### Papéis (ainda não concluído)
 
 * SUPER ADMINISTRADOR
