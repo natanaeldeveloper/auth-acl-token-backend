@@ -1,25 +1,17 @@
-# Personal Access Token + ACL
-
-## Objetivo 
-Padronizar e flexibilizar o gerenciamento de papeis e permissões de usuários dentro de um sistema utilizando autenticação via token.
+# API Licitação - ALECE
 
 ## Tecnologias 
 * `php 8.2`
 * `laravel 10`
 
-## Coleção de rotas (Postman)
-[link para o arquivo](/2023_06_20_110437_collection_postman.json)
-
 ## Registros base de permissões
 
-### Papéis
+### Papéis (ainda não concluído)
 
 * SUPER ADMINISTRADOR
 * ADMINISTRADOR
-* MODERADOR
-* USUÁRIO REGULAR
 
-### Permissões
+### Permissões (ainda não concluído)
 
 * `admin` - Todas as permissões do admistrativo.
     * `admin:user` - Gerenciamento de usuários incluindo: cadastro, edição e vinculo de papéis e permissões a usuários do sistema.
@@ -45,10 +37,11 @@ Padronizar e flexibilizar o gerenciamento de papeis e permissões de usuários d
     * `create:anexo` - Cadastro de anexo ao processo.
     * `baixar:anexo` - Baixar documento do anexo.
     * `remove:anexo` - Remoção de anexo.
+    * `assinar:anexo` - Assinar anexo.
 * `ata` - Todas as permissões de ata.
     * `write:ata` - Escrita (Cadastro e Edição) de Ata de Registro de Preço.
     * `read:ata` - Leitura de Ata de Registro de Preço. 
-* `contrato` - Todas as permissões de ata.
+* `contrato` - Todas as permissões de contrato.
     * `write:contrato` - Escrita (Cadastro e Edição) de Contrato.
     * `read:contrato` - Leitura de Contrato. 
 * `caixa_entrada` - Define se o usuário possuirá caixa de entrada.
