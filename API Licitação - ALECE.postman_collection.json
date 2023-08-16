@@ -3596,6 +3596,192 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "credenciamentos (não implementado)",
+			"item": [
+				{
+					"name": "api/credenciamentos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/credenciamentos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"credenciamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/credenciamentos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pessoa_juridica\": true,\r\n    \"cpf_cnpj\": \"\",\r\n    \"nome_fantasia\": \"\",\r\n    \"razao_social\": \"\",\r\n    \"telefone\": \"\",\r\n    \"celular\": \"\",\r\n    \"email\": \"\",\r\n    \"tipo_empresa_id\": 0,\r\n    \"natureza_juridica_id\": 0,\r\n    \"atividade_principal_id\": 0,\r\n    \"atividade_secundaria_id\": 0,\r\n    \"cep\": \"\",\r\n    \"logadouro\": \"\",\r\n    \"numero\": \"\",\r\n    \"bairro\": \"\",\r\n    \"municipio\": \"\",\r\n    \"complemento\": \"\" \r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/credenciamentos",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"credenciamentos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/credenciamentos/{credenciamento}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/credenciamentos/:credenciamento",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"credenciamentos",
+								":credenciamento"
+							],
+							"variable": [
+								{
+									"key": "credenciamento",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/credenciamentos/{credenciamento}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"pessoa_juridica\": true,\r\n    \"cpf_cnpj\": \"\",\r\n    \"nome_fantasia\": \"\",\r\n    \"razao_social\": \"\",\r\n    \"telefone\": \"\",\r\n    \"celular\": \"\",\r\n    \"email\": \"\",\r\n    \"tipo_empresa_id\": 0,\r\n    \"natureza_juridica_id\": 0,\r\n    \"atividade_principal_id\": 0,\r\n    \"atividade_secundaria_id\": 0,\r\n    \"cep\": \"\",\r\n    \"logadouro\": \"\",\r\n    \"numero\": \"\",\r\n    \"bairro\": \"\",\r\n    \"municipio\": \"\",\r\n    \"complemento\": \"\" \r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/credenciamentos/:credenciamento",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"credenciamentos",
+								":credenciamento"
+							],
+							"variable": [
+								{
+									"key": "credenciamento",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "api/credenciamentos/{credenciamento}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/credenciamentos/:credenciamento",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"credenciamentos",
+								":credenciamento"
+							],
+							"variable": [
+								{
+									"key": "credenciamento",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
