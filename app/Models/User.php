@@ -19,11 +19,6 @@ class User extends Authenticatable
     }
 
     /**
-     * @var int
-     */
-    protected $superAdminRoleId = 1;
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -32,10 +27,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'cpf',
-        'nome_pai',
-        'nome_mae',
-        'orgao_id',
     ];
 
     /**
@@ -58,18 +49,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function cpf(): Attribute
-    {
-        return Attribute::make(
-            get: function (string $value) {
-                return preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $value);
-            },
-            set: function (string $value) {
-                return str_replace([',', '.', '-', ' '], '', $value);
-            }
-        );
-    }
-
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'users_roles');
@@ -78,16 +57,6 @@ class User extends Authenticatable
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'users_permissions');
-    }
-
-    public function orgao()
-    {
-        return $this->belongsTo(Orgao::class, 'orgao_id', 'id');
-    }
-
-    public function isSuperAdmin()
-    {
-        return $this->roles->where('id', $this->superAdminRoleId)->count() > 0 ? true : false;
     }
 
     /**

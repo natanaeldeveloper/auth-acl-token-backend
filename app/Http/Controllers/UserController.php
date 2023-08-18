@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        return new UserCollection(User::with('orgao', 'orgao.tipoOrgao')->orderBy('name')->paginate(10));
+        return new UserCollection(User::get()->orderBy('name')->paginate(10));
     }
 
     /**

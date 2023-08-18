@@ -16,24 +16,18 @@ class UserTableSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Super Administrator',
             'email' => 'superadmin@example.com',
-            'orgao_id' => 1,
-            'cpf' => '10293029300',
             'password' => Hash::make('12345678'),
         ])->roles()->attach([1]);
 
         \App\Models\User::factory()->create([
             'name' => 'Administrador',
             'email' => 'admin@example.com',
-            'orgao_id' => 2,
-            'cpf' => '10293029300',
             'password' => Hash::make('12345678'),
         ])->roles()->attach([2]);
 
         \App\Models\User::factory()->create([
             'name' => 'Usuário Regular',
             'email' => 'regular@example.com',
-            'orgao_id' => 2,
-            'cpf' => '10293029300',
             'password' => Hash::make('12345678'),
         ]);
     }

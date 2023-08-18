@@ -24,10 +24,6 @@ class StoreUserRequest extends Request
         return [
             'name' => ['required', 'max:255'],
             'email' => ['required', 'max:255', 'email', Rule::unique('users', 'email')],
-            'nome_pai' => ['max:255'],
-            'nome_mae' => ['max:255'],
-            'cpf' => ['required', 'max:255', 'regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/'],
-            'orgao_id' => ['required', Rule::exists('orgaos', 'id')],
             'password' => ['required', 'min:6', 'max:255'],
             'password_confirmation' => ['required', 'same:password']
         ];
@@ -43,10 +39,6 @@ class StoreUserRequest extends Request
         return [
             'name' => 'Nome',
             'email' => 'Email',
-            'nome_pai' => 'Nome do Pai',
-            'nome_mae' => 'Nome ds Mãe',
-            'cpf' => 'CPF',
-            'orgao_id' => 'Orgão',
             'password' => 'Senha',
             'password_confirmation' => 'Senha de Confirmação',
         ];

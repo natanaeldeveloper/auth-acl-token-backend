@@ -72,20 +72,4 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('redefine', [App\Http\Controllers\ACL\PivotPermissionToUserController::class, 'redefine'])->name('permission.user.redefine');
     });
 
-    // rotas de tipo de anexo
-    Route::apiResource('tipos-anexos', App\Http\Controllers\TipoAnexoController::class)->names('tipoAnexo');
-
-    // rotas de orgãos
-    Route::apiResource('orgaos', App\Http\Controllers\OrgaoController::class)->names('orgao');
-    Route::apiResource('processos', App\Http\Controllers\ProcessoController::class)->names('processo');
-
-    Route::prefix('processos/{processo}')->group(function () {
-        Route::apiResource('anexos', \App\Http\Controllers\AnexoController::class)->names('processo.anexo');
-        Route::get('anexos/{anexo}/download', [\App\Http\Controllers\AnexoController::class, 'download'])->name('processo.anexo.download');
-    });
-
-    Route::get('caixa-entrada', [\App\Http\Controllers\CaixaEntradaController::class, 'index'])->name('caixaEntrada');
-    Route::get('caixa-saida', [\App\Http\Controllers\CaixaSaidaController::class, 'index'])->name('caixaSaida');
-    Route::get('caixa-rascunho', [\App\Http\Controllers\CaixaRascunhoController::class, 'index'])->name('caixaRascunho');
-
 });
