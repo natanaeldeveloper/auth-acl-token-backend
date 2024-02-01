@@ -18,7 +18,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return new RoleCollection(Role::orderBy('name')->paginate(10));
+        return new RoleCollection(Role::paginate(10));
     }
 
     /**
@@ -30,7 +30,7 @@ class RoleController extends Controller
 
         return response()->json([
             'status'    => 'success',
-            'message'   => __('messages.created.success'),
+            'message'   => __('Resource created successfully.'),
             'data'      => $data,
         ], 201);
     }
@@ -58,7 +58,7 @@ class RoleController extends Controller
 
         return response()->json([
             'status'    => 'success',
-            'message'   => __('messages.updated.success'),
+            'message'   => __('Resource updated successfully.'),
             'data'      => $data,
         ]);
     }

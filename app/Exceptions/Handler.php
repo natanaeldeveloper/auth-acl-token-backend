@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
 
                 $response = response()->json([
                     'status'        => 'error',
-                    'code'          => $statusCode,
+                    'statusCode'    => $statusCode,
                     'message'       => $message,
                     'time'          => $time,
                     'errors'        => $e->errors(),
@@ -70,7 +70,7 @@ class Handler extends ExceptionHandler
 
                 $response = response()->json([
                     'status'        => 'error',
-                    'code'          => $statusCode,
+                    'statusCode'    => $statusCode,
                     'message'       => $message,
                     'time'          => $time,
                 ], $statusCode);

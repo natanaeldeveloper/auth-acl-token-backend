@@ -6,15 +6,17 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
-class PersonalAccessToken extends SanctumPersonalAccessToken
+class UserPersonalAccessToken extends SanctumPersonalAccessToken
 {
+
+    protected $table = "personal_access_tokens";
 
     protected function abilities(): Attribute
     {
         return Attribute::make(
             get: function (string $value) {
 
-                if($this->tokenable instanceof User) {
+                if ($this->tokenable instanceof User) {
                     return $this->getUserAbilities();
                 }
 

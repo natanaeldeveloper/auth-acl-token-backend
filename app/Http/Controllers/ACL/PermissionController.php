@@ -18,7 +18,7 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        return new PermissionCollection(Permission::orderBy('name')->paginate(10));
+        return new PermissionCollection(Permission::paginate(10));
     }
 
     /**
@@ -30,7 +30,7 @@ class PermissionController extends Controller
 
         return response()->json([
             'status'    => 'success',
-            'message'   => __('messages.created.success'),
+            'message'   => __('Resource created successfully.'),
             'data'      => $data,
         ], 201);
     }
@@ -58,7 +58,7 @@ class PermissionController extends Controller
 
         return response()->json([
             'status'    => 'success',
-            'message'   => __('messages.updated.success'),
+            'message'   => __('Resource updated successfully.'),
             'data'      => $data,
         ]);
     }

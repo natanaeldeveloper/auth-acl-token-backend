@@ -53,7 +53,7 @@ class PivotUserToPermissionController extends Controller
 
             return response()->json([
                 'status'    => 'success',
-                'message'   => __('messages.created.success'),
+                'message'   => __('Resource created successfully.'),
                 'data'      => $data,
             ]);
         } catch (\Throwable $e) {
@@ -101,7 +101,7 @@ class PivotUserToPermissionController extends Controller
 
             return response()->json([
                 'status'    => 'success',
-                'message'   => __('messages.updated.success'),
+                'message'   => __('Resource updated successfully.'),
                 'data'      => $data,
             ]);
         } catch (\Throwable $e) {
